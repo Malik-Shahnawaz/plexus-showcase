@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/2D5IAQANhmRdwkjUgOEd72dJbuQ.png?width=1600" data-resource-id="work1">
+<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/jzE4gRg8fwdXM5Fx1Nw29KoR4g.png?width=1600" data-resource-id="work2">
+<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/i8zIEpMXrRLMf6NhMtnnzxCoKM.png?width=1600" data-resource-id="work3">
+<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/jmqwGNborcpHrdZx3TOmzFHF6Ls.png?width=1600" data-resource-id="work4">
+<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/EDCem0wHc5bmVoSz14tSDY5cE.jpg?width=1600" data-resource-id="work5">
+<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/XNcbmOdK58mr0NEBaIZyW6cyNU.png?width=1600" data-resource-id="work6">
+<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/r9YgrEFzktEr0kkxDJb7fOxRic.png?width=1600" data-resource-id="work7">
+<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/ZyXRprJVzR1wENlIDGwOQwPqeDw.png?width=1600" data-resource-id="work8">
+<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/aAL2GFO7QUvSNcLuxMKVkS9TDKE.png?width=1600" data-resource-id="work9">
+<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/libPRIiOwpgMdGMpDI2dENTVt1I.png?width=1600" data-resource-id="work10">
+</head>
+<body>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" data-bg-color="#0b1220"><rect width="100" height="100" fill="#0b1220"/><rect x="30" y="36" width="40" height="24" rx="2" fill="none" stroke="#e9edf5" stroke-width="3"/><circle cx="50" cy="68" r="3" fill="#3b82f6"/></svg></template>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;family=Inter:opsz,wght@32,700&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#03192c;}
+*{box-sizing:border-box;}
+a{color:#e9edf5;text-decoration:none;}
+a:hover{color:#6fa8ff;}
+.cv-pic{transition:transform 600ms cubic-bezier(.2,.7,.2,1),opacity 200ms ease,visibility 200ms;}
+@media (hover:hover){.cv-card:hover .cv-pic{transform:scale(1.03);}}
+/* The GIF is put away with visibility as well as opacity so it is not painted at rest, and it
+   shows only once it has loaded whole and the card is hovered: never a half-drawn GIF. */
+.cv-gif{opacity:0;visibility:hidden;}
+.cv-gif[data-hover="true"][data-loaded="true"]{opacity:1;visibility:visible;}
+/* PLAY CURSOR, as on our_work_gif.tsx: over a frame the native pointer hides and a PLAY NOW pill
+   follows it. The cursor is set here, not inline, or the cv-on swap would lose to it. isolate keeps
+   the pill's difference blend to this card; no background or overflow here, or the blend would
+   grey the pill where it hangs off the frame, and the frame would clip it. */
+.cv-play{position:relative;display:block;cursor:pointer;isolation:isolate;}
+.cv-play.cv-on{cursor:none;}
+.cv-play:focus-visible{outline:none;}
+.cv-play:focus-visible .cv-media{outline:2px solid #2ee6c4;outline-offset:4px;}
+/* The layer the loop moves, and the only element carrying the blend: on the pill, this layer's
+   own transform would isolate it into a flat white pill. 0 x 0, placed with a translate. */
+.cv-cursor{position:absolute;top:0;left:0;width:0;height:0;z-index:2;pointer-events:none;mix-blend-mode:difference;}
+/* Pure white and black are load-bearing: difference paints white as the inverse of the frame and
+   black as no change. nowrap because the containing block is that 0px layer. */
+.cv-pill{position:absolute;top:0;left:0;white-space:nowrap;background:#fff;color:#000;border-radius:999px;padding:12px 18px;font-family:'Inter Display','Inter',system-ui,-apple-system,sans-serif;font-size:18px;font-weight:700;line-height:16px;letter-spacing:-0.2px;font-variation-settings:"opsz" 32;text-transform:uppercase;user-select:none;transform:translate(-50%,-50%) scale(0);transition:transform 500ms ease-out;}
+.cv-play.cv-on .cv-pill{transform:translate(-50%,-50%) scale(1);}
+/* FILM OVERLAY, as on our_work_gif.tsx: the film full size over a dark room. A click on the room,
+   the close button or Escape puts it away. Mux's player is an iframe with no size of its own, so
+   it gets the largest 16 / 9 box that fits. */
+.cv-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:clamp(16px,5vw,64px);background:rgba(10,10,10,0.92);backdrop-filter:blur(2px);cursor:zoom-out;animation:cv-fade-in 200ms ease;}
+@keyframes cv-fade-in{from{opacity:0;}}
+.cv-overlay-close{position:absolute;top:clamp(12px,2vw,28px);right:clamp(12px,2vw,28px);display:flex;margin:0;padding:6px;border:0;background:transparent;color:#e9edf5;cursor:pointer;line-height:0;}
+.cv-overlay-close:hover{color:#fff;}
+.cv-overlay-close:focus-visible{outline:2px solid #2ee6c4;outline-offset:2px;}
+.cv-overlay-film{display:block;width:min(1200px,92vw,82vh * 16 / 9);aspect-ratio:16/9;border:0;border-radius:6px;background:#0a0a0a;cursor:auto;}
+@media (max-width:809px){
+  .cv-overlay{padding:56px 12px 12px;}
+  .cv-overlay-close{padding:10px;}
+  .cv-overlay-film{width:min(100%,70dvh * 16 / 9);}
+}
+</style>
+</helmet>
+<div style="min-height:100vh;background-color:#06306b;background-image:linear-gradient(rgba(255,255,255,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.045) 1px,transparent 1px),radial-gradient(ellipse 65% 16% at 28% 20%,rgba(30,220,175,0.38),transparent 70%),radial-gradient(ellipse 75% 20% at 78% 46%,rgba(0,210,195,0.32),transparent 70%),radial-gradient(ellipse 60% 22% at 20% 85%,rgba(40,160,255,0.28),transparent 70%),linear-gradient(168deg,#03192c 0%,#063a7a 32%,#0a5cb0 62%,#0b86b8 100%);background-size:76px 76px,76px 76px,100% 100%,100% 100%,100% 100%,100% 100%;background-attachment:fixed;color:#e9edf5;font-family:'Plus Jakarta Sans',Helvetica,sans-serif;padding:clamp(40px,7vw,104px) clamp(20px,6vw,96px) 64px;">
+  <header style="max-width:1440px;margin:0 auto clamp(40px,6vw,80px);display:flex;flex-direction:column;gap:20px;">
+    
+    <h1 style="margin:0;font-weight:600;font-size:clamp(40px,7vw,96px);line-height:0.98;letter-spacing:-0.03em;text-wrap:balance;">Plexus Creative Showcase<span style="color:#2ee6c4;">.</span></h1>
+    
+  </header>
+
+  <main style="max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,{{ minCol }}),1fr));column-gap:clamp(20px,3vw,48px);row-gap:clamp(40px,5vw,72px);">
+    <sc-for list="{{ items }}" as="item" hint-placeholder-count="10">
+      <!-- Two targets, as on our_work_gif.tsx: the frame opens the film, the title below links to the
+           project. A button inside a link is not valid HTML, so the card is a plain box. -->
+      <div class="cv-card" style="grid-column:{{ item.span }};display:flex;flex-direction:column;gap:18px;color:#e9edf5;" onMouseEnter="{{ item.enter }}" onMouseLeave="{{ item.leave }}">
+        <div class="cv-play" role="button" tabIndex="0" aria-label="{{ item.playLabel }}" aria-haspopup="dialog" onClick="{{ item.open }}" onKeyDown="{{ item.keydown }}" onPointerEnter="{{ item.cursorEnter }}" onPointerMove="{{ item.cursorMove }}" onPointerLeave="{{ item.cursorLeave }}">
+          <div class="cv-media" style="position:relative;aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:#141d30;">
+            <img class="cv-pic" src="{{ item.img }}" alt="{{ item.title }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">
+            <img class="cv-pic cv-gif" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">
+          </div>
+          <!-- A sibling of the media, never inside it: there its overflow would clip the pill. -->
+          <div class="cv-cursor" aria-hidden="true"><span class="cv-pill">Play now</span></div>
+        </div>
+        <a href="{{ item.href }}" target="_blank" rel="noopener" style="display:flex;align-items:baseline;gap:18px;padding:0 2px;color:#e9edf5;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7ff0d8;min-width:20px;">{{ item.num }}</span>
+          <div style="display:flex;flex-direction:column;gap:6px;min-width:0;">
+            <span style="font-size:clamp(20px,2vw,26px);font-weight:500;letter-spacing:0.01em;text-transform:uppercase;line-height:1.1;">{{ item.title }}</span>
+            <span style="font-size:15px;font-weight:400;color:#c3d2e8;">{{ item.meta }}</span>
+          </div>
+        </a>
+      </div>
+    </sc-for>
+  </main>
+
+  <sc-if value="{{ film }}">
+    <div class="cv-overlay" role="dialog" aria-modal="true" aria-label="{{ film.title }}" onClick="{{ close }}">
+      <button class="cv-overlay-close" type="button" aria-label="Close" onClick="{{ close }}">
+        <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M5 5 L21 21 M21 5 L5 21" stroke="currentColor" strokeWidth="1.5" fill="none"></path></svg>
+      </button>
+      <!-- A click inside the iframe never reaches this page, so the film is not a dismiss target. -->
+      <iframe class="cv-overlay-film" src="{{ film.src }}" title="{{ film.title }}" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"></iframe>
+    </div>
+  </sc-if>
+
+  <footer style="max-width:1440px;margin:clamp(64px,8vw,120px) auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,0.18);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#c3d2e8;">
+    <span>Plexus</span>
+    <span>©2026</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;layout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Featured&quot;,&quot;Uniform&quot;],&quot;default&quot;:&quot;Uniform&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;columns&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[2,3],&quot;default&quot;:3,&quot;tsType&quot;:&quot;number&quot;},&quot;linkToWork&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+/* Title, meta, card image, slug, hover GIF, film. The GIF is fetched on the card's first hover: they
+   are 2-11 MB each, so ten up front would be most of 85 MB. The films are the Mux links in
+   ../ctvbuyer/mux_videos.json. */
+const WORK = [
+  ['Arizona Biltmore','Hospitality Concept Film','2D5IAQANhmRdwkjUgOEd72dJbuQ.png','arizona-biltmore','mKmgfcXQfRz26XCoqHf03RZ4DDU.gif','https://player.mux.com/hGxXPKU9pG8WbeuZ6cds3iOXJ4Lu6gSsZ5cNE00ULpGo'],
+  ['Wander Luck','DTC Concept Campaign','jzE4gRg8fwdXM5Fx1Nw29KoR4g.png','wander-luck','cGTVlmKWlVp70L3Sa2341Z1fIs.gif','https://player.mux.com/CRPiMAgPvegrKTC4V600NF02BvcsKrmYnrHQDX2iZXI4k'],
+  ['Streetlight Taco','Brand Awareness Demo','i8zIEpMXrRLMf6NhMtnnzxCoKM.png','streetlight-taco','h2J8Gn5Qos1YmDZA7rF8Bxg0c.gif','https://player.mux.com/al9LlSqxes11ujNV02t00sVBrTnud8jG6mEOg2awGmkdk'],
+  ['Jay Luigi','Brand Awareness Demo','jmqwGNborcpHrdZx3TOmzFHF6Ls.png','jay-luigi','n9Oea0M5KdbxyVKoGCWBLFxVy6s.gif','https://player.mux.com/tSjhQfpRJauZ100l00FwyPmorekhEQqF007Za8m2I5g01CY'],
+  ['Astro Bites','Brand Launch Demo','EDCem0wHc5bmVoSz14tSDY5cE.jpg','astro-bites','btMTsgDDg7XsLHrjs6bfgObs1h4.gif','https://player.mux.com/NJkxwrk2X2tmwTDFXhwRHP295Mtnrm3kN4qaL3UpZoA'],
+  ['Honey Beer','Brand Launch Demo','XNcbmOdK58mr0NEBaIZyW6cyNU.png','honey-beer','ZSJRN7qPgeV7RT4V5PGhGctGVw.gif','https://player.mux.com/30226mRiCaunMpEmaRqKm6LoL1hWBa9KdgzrnxEX2O02k'],
+  ['Event Planning','Experiential Brand Film','r9YgrEFzktEr0kkxDJb7fOxRic.png','event-planning','we6bN24XKnPKs68X2pJ7CcjQ.gif','https://player.mux.com/JAU007r9AQbitiSAhnWDUn4IL00m4cQEtylCETjruPK6s'],
+  ['VegasBuilder','App Acquisition & Positioning','ZyXRprJVzR1wENlIDGwOQwPqeDw.png','vegasbuilder','rayi09AeqRBmE7bRAT74P2DOBE.gif','https://player.mux.com/p02sa9ZsSPXNnmamCythJMmF6p1FW9YKm3yW01BUeDsjs'],
+  ['BidSlam','Direct-Response E-Commerce','aAL2GFO7QUvSNcLuxMKVkS9TDKE.png','bidslam','MIXfahJYJUnKmnJJ0HKgyerEgUk.gif','https://player.mux.com/y8s38WeP8hrLsRgPECjH55gWL1IBaVoqoys0200onqHoY'],
+  ['Prophet X','Category Reframe & User Conversion','libPRIiOwpgMdGMpDI2dENTVt1I.png','prophet-x','RFeqbP54GK206qNjvtn8Rh3daQc.gif','https://player.mux.com/bh9uJIEDeyF2sd02D676SpJ00tYIxzjOpFclYEg01Trw9g'],
+];
+/* The page's teal, in place of Mux's pink. */
+const ACCENT = '#2ee6c4';
+/* "any" tries to start with sound and falls back to muted where a browser refuses, as Safari can for
+   a player inside an iframe. A link that already names these keeps its own. */
+function filmSrc(link) {
+  const url = new URL(link);
+  if (!url.searchParams.has('autoplay')) url.searchParams.set('autoplay', 'any');
+  if (!url.searchParams.has('accent-color')) url.searchParams.set('accent-color', ACCENT);
+  return url.toString();
+}
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { film: null };
+    /* One cursor record per frame, and the frames whose loop is running, so an unmount can stop them. */
+    this.cursors = new WeakMap();
+    this.loops = new Set();
+    this.opener = null;
+    this.bodyOverflow = '';
+    this.onKey = (e) => {
+      if (e.key !== 'Escape' || !this.state.film) return;
+      e.stopPropagation();
+      this.closeFilm();
+    };
+  }
+  componentDidMount() {
+    window.addEventListener('keydown', this.onKey, true);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onKey, true);
+    this.loops.forEach((c) => cancelAnimationFrame(c.frame));
+    this.loops.clear();
+    if (this.state.film) document.body.style.overflow = this.bodyOverflow;
+  }
+  /* PLAY CURSOR, as on our_work_gif.tsx. Everything it animates is written straight to the DOM, so a
+     card does not re-render sixty times a second: hover is a class on the frame, which survives the
+     page's re-renders because the template's className never changes. px/py is the pointer in
+     viewport coordinates and the frame is re-measured every frame, because a wheel scroll moves the
+     card out from under a still pointer without a pointer event. cx/cy is the pill chasing it in the
+     frame's pixels; ox/oy is where the frame sat last frame, which tells a scroll from a move. */
+  cursorOf(frame) {
+    let c = this.cursors.get(frame);
+    if (!c) {
+      c = { frame: 0, hover: false, last: 0, px: 0, py: 0, cx: 0, cy: 0, ox: 0, oy: 0, reduced: false };
+      this.cursors.set(frame, c);
+    }
+    return c;
+  }
+  /* Opens the pill where the pointer is: without the snap it flies in from the corner. Reduced
+     motion drops the lag and keeps the pill. */
+  armCursor(frame) {
+    const layer = frame.querySelector('.cv-cursor');
+    const c = this.cursorOf(frame);
+    const rect = frame.getBoundingClientRect();
+    if (!layer || !rect.width) return;
+    c.hover = true;
+    c.reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    c.cx = c.px - rect.left;
+    c.cy = c.py - rect.top;
+    c.ox = rect.left;
+    c.oy = rect.top;
+    layer.style.transform = 'translate3d(' + c.cx + 'px,' + c.cy + 'px,0)';
+    frame.classList.add('cv-on');
+    this.runCursor(frame, layer, c);
+  }
+  /* One loop per frame, and its id is the mutex: a pointer back while the pill is still easing finds
+     the loop running and only re-aims it. */
+  runCursor(frame, layer, c) {
+    if (c.frame) return;
+    const step = (now) => {
+      const rect = frame.getBoundingClientRect();
+      if (!frame.isConnected || !rect.width) {
+        c.frame = 0;
+        this.loops.delete(c);
+        return;
+      }
+      const x = c.px - rect.left;
+      const y = c.py - rect.top;
+      /* A scroll is spent directly rather than eased, so the pill holds its place on screen. */
+      c.cx -= rect.left - c.ox;
+      c.cy -= rect.top - c.oy;
+      c.ox = rect.left;
+      c.oy = rect.top;
+      if (c.reduced) {
+        c.cx = x;
+        c.cy = y;
+      } else {
+        /* dt counts 60Hz frames, so the curve is the same at any refresh rate; the clamp is for a
+           tab back from the background. */
+        const dt = Math.min((now - c.last) / 16.67, 3);
+        const ease = 1 - Math.pow(1 - 0.16, dt);
+        c.cx += (x - c.cx) * ease;
+        c.cy += (y - c.cy) * ease;
+      }
+      c.last = now;
+      layer.style.transform = 'translate3d(' + c.cx + 'px,' + c.cy + 'px,0)';
+      if (c.hover || Math.abs(x - c.cx) >= 0.5 || Math.abs(y - c.cy) >= 0.5) {
+        c.frame = requestAnimationFrame(step);
+        return;
+      }
+      c.frame = 0;
+      this.loops.delete(c);
+    };
+    c.last = performance.now();
+    c.frame = requestAnimationFrame(step);
+    this.loops.add(c);
+  }
+  /* A pointer leaving calls it, and so does opening the film: the overlay arrives under a pointer
+     that never left. */
+  resetCursor(frame) {
+    this.cursorOf(frame).hover = false;
+    frame.classList.remove('cv-on');
+  }
+  /* A tap has no cursor to follow. */
+  cursorEnter(e) {
+    if (e.pointerType === 'touch') return;
+    const c = this.cursorOf(e.currentTarget);
+    c.px = e.clientX;
+    c.py = e.clientY;
+    this.armCursor(e.currentTarget);
+  }
+  /* A move can arrive with no enter before it: the film opened over the card and closed with the
+     pointer never having left. That first move stands in for the enter, for the GIF too. */
+  cursorMove(e, gifUrl) {
+    if (e.pointerType === 'touch') return;
+    const frame = e.currentTarget;
+    const c = this.cursorOf(frame);
+    c.px = e.clientX;
+    c.py = e.clientY;
+    if (c.hover) return;
+    this.armCursor(frame);
+    const card = frame.closest('.cv-card');
+    if (card) this.playGif(card, gifUrl);
+  }
+  /* Nothing plays under the overlay. The page is held still underneath, and focus moves to the close
+     button so Escape and Tab act on the overlay; it goes back to the frame on the way out. */
+  openFilm(frame, link, title) {
+    if (this.state.film) return;
+    this.resetCursor(frame);
+    const card = frame.closest('.cv-card');
+    if (card) this.stopGif(card);
+    this.opener = frame;
+    this.bodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    this.setState({ film: { src: filmSrc(link), title } }, () => {
+      const close = document.querySelector('.cv-overlay-close');
+      if (close) close.focus();
+    });
+  }
+  closeFilm() {
+    if (!this.state.film) return;
+    document.body.style.overflow = this.bodyOverflow;
+    this.setState({ film: null }, () => {
+      if (this.opener && this.opener.isConnected) this.opener.focus({ preventScroll: true });
+      this.opener = null;
+    });
+  }
+  /* Plays from the first frame on every hover: a GIF has no currentTime, so setting its src again
+     (the same file, already loaded, nothing fetched) is what restarts it. It is shown only once it
+     has loaded, and only while hovered. */
+  playGif(card, url) {
+    const gif = card.querySelector('.cv-gif');
+    if (!gif) return;
+    gif.dataset.hover = 'true';
+    if (!gif.dataset.bound) {
+      gif.dataset.bound = '1';
+      gif.addEventListener('load', () => { gif.dataset.loaded = 'true'; });
+      gif.addEventListener('error', () => { delete gif.dataset.bound; });
+      gif.src = url;
+    } else if (gif.complete && gif.dataset.loaded === 'true') {
+      gif.src = url;
+    }
+  }
+  stopGif(card) {
+    const gif = card.querySelector('.cv-gif');
+    if (gif) delete gif.dataset.hover;
+  }
+  renderVals() {
+    const layout = this.props.layout ?? 'Featured';
+    const cols = this.props.columns ?? 2;
+    const link = this.props.linkToWork ?? false;
+    const last = WORK.length - 1;
+    const items = WORK.map(([title, meta, img, slug, gif, video], i) => {
+      const full = layout === 'Featured' && (i === 0 || (cols === 2 && i === last && last % 2 === 1));
+      const gifUrl = 'https://framerusercontent.com/assets/' + gif;
+      return {
+        num: String(i + 1).padStart(2, '0'),
+        title, meta,
+        img: (window.__resources && window.__resources['work' + (i + 1)]) || ('https://framerusercontent.com/images/' + img + '?width=1600'),
+        href: link ? 'https://creativedirection.ai/work/' + slug : undefined,
+        enter: (e) => this.playGif(e.currentTarget, gifUrl),
+        leave: (e) => this.stopGif(e.currentTarget),
+        playLabel: 'Play ' + title,
+        open: (e) => this.openFilm(e.currentTarget, video, title),
+        keydown: (e) => {
+          if (e.key !== 'Enter' && e.key !== ' ') return;
+          e.preventDefault();
+          this.openFilm(e.currentTarget, video, title);
+        },
+        cursorEnter: (e) => this.cursorEnter(e),
+        cursorMove: (e) => this.cursorMove(e, gifUrl),
+        cursorLeave: (e) => this.resetCursor(e.currentTarget),
+        span: full ? '1 / -1' : 'auto',
+      };
+    });
+    return {
+      items,
+      minCol: cols === 3 ? '340px' : '440px',
+      film: this.state.film,
+      close: () => this.closeFilm(),
+    };
+  }
+}
+</script>
+</body>
+</html>
