@@ -4,16 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
-<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/2D5IAQANhmRdwkjUgOEd72dJbuQ.png?width=1600" data-resource-id="work1">
-<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/jzE4gRg8fwdXM5Fx1Nw29KoR4g.png?width=1600" data-resource-id="work2">
-<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/i8zIEpMXrRLMf6NhMtnnzxCoKM.png?width=1600" data-resource-id="work3">
-<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/jmqwGNborcpHrdZx3TOmzFHF6Ls.png?width=1600" data-resource-id="work4">
-<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/EDCem0wHc5bmVoSz14tSDY5cE.jpg?width=1600" data-resource-id="work5">
-<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/XNcbmOdK58mr0NEBaIZyW6cyNU.png?width=1600" data-resource-id="work6">
-<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/r9YgrEFzktEr0kkxDJb7fOxRic.png?width=1600" data-resource-id="work7">
-<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/ZyXRprJVzR1wENlIDGwOQwPqeDw.png?width=1600" data-resource-id="work8">
-<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/aAL2GFO7QUvSNcLuxMKVkS9TDKE.png?width=1600" data-resource-id="work9">
-<meta name="ext-resource-dependency" content="https://framerusercontent.com/images/libPRIiOwpgMdGMpDI2dENTVt1I.png?width=1600" data-resource-id="work10">
 </head>
 <body>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" data-bg-color="#0b1220"><rect width="100" height="100" fill="#0b1220"/><rect x="30" y="36" width="40" height="24" rx="2" fill="none" stroke="#e9edf5" stroke-width="3"/><circle cx="50" cy="68" r="3" fill="#3b82f6"/></svg></template>
@@ -111,23 +101,27 @@ a:hover{color:#6fa8ff;}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;layout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Featured&quot;,&quot;Uniform&quot;],&quot;default&quot;:&quot;Uniform&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;columns&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[2,3],&quot;default&quot;:3,&quot;tsType&quot;:&quot;number&quot;},&quot;linkToWork&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
-/* Title, meta, card image, slug, hover GIF, film. The GIF is fetched on the card's first hover: they
-   are 2-11 MB each, so ten up front would be most of 85 MB. The films are the Mux links in
-   ../ctvbuyer/mux_videos.json. */
+/* Title, meta, card image, slug, hover GIF, film. Image and GIF are paths under ./assets/. The GIF is
+   fetched on the card's first hover: they are 8-12 MB each, so ten up front would be close to 100 MB.
+   The films are the Mux links in ../ctvbuyer/mux_videos.json. */
 const WORK = [
-  ['Arizona Biltmore','Hospitality Concept Film','2D5IAQANhmRdwkjUgOEd72dJbuQ.png','arizona-biltmore','mKmgfcXQfRz26XCoqHf03RZ4DDU.gif','https://player.mux.com/hGxXPKU9pG8WbeuZ6cds3iOXJ4Lu6gSsZ5cNE00ULpGo'],
-  ['Wander Luck','DTC Concept Campaign','jzE4gRg8fwdXM5Fx1Nw29KoR4g.png','wander-luck','cGTVlmKWlVp70L3Sa2341Z1fIs.gif','https://player.mux.com/CRPiMAgPvegrKTC4V600NF02BvcsKrmYnrHQDX2iZXI4k'],
-  ['Streetlight Taco','Brand Awareness Demo','i8zIEpMXrRLMf6NhMtnnzxCoKM.png','streetlight-taco','h2J8Gn5Qos1YmDZA7rF8Bxg0c.gif','https://player.mux.com/al9LlSqxes11ujNV02t00sVBrTnud8jG6mEOg2awGmkdk'],
-  ['Jay Luigi','Brand Awareness Demo','jmqwGNborcpHrdZx3TOmzFHF6Ls.png','jay-luigi','n9Oea0M5KdbxyVKoGCWBLFxVy6s.gif','https://player.mux.com/tSjhQfpRJauZ100l00FwyPmorekhEQqF007Za8m2I5g01CY'],
-  ['Astro Bites','Brand Launch Demo','EDCem0wHc5bmVoSz14tSDY5cE.jpg','astro-bites','btMTsgDDg7XsLHrjs6bfgObs1h4.gif','https://player.mux.com/NJkxwrk2X2tmwTDFXhwRHP295Mtnrm3kN4qaL3UpZoA'],
-  ['Honey Beer','Brand Launch Demo','XNcbmOdK58mr0NEBaIZyW6cyNU.png','honey-beer','ZSJRN7qPgeV7RT4V5PGhGctGVw.gif','https://player.mux.com/30226mRiCaunMpEmaRqKm6LoL1hWBa9KdgzrnxEX2O02k'],
-  ['Event Planning','Experiential Brand Film','r9YgrEFzktEr0kkxDJb7fOxRic.png','event-planning','we6bN24XKnPKs68X2pJ7CcjQ.gif','https://player.mux.com/JAU007r9AQbitiSAhnWDUn4IL00m4cQEtylCETjruPK6s'],
-  ['VegasBuilder','App Acquisition & Positioning','ZyXRprJVzR1wENlIDGwOQwPqeDw.png','vegasbuilder','rayi09AeqRBmE7bRAT74P2DOBE.gif','https://player.mux.com/p02sa9ZsSPXNnmamCythJMmF6p1FW9YKm3yW01BUeDsjs'],
-  ['BidSlam','Direct-Response E-Commerce','aAL2GFO7QUvSNcLuxMKVkS9TDKE.png','bidslam','MIXfahJYJUnKmnJJ0HKgyerEgUk.gif','https://player.mux.com/y8s38WeP8hrLsRgPECjH55gWL1IBaVoqoys0200onqHoY'],
-  ['Prophet X','Category Reframe & User Conversion','libPRIiOwpgMdGMpDI2dENTVt1I.png','prophet-x','RFeqbP54GK206qNjvtn8Rh3daQc.gif','https://player.mux.com/bh9uJIEDeyF2sd02D676SpJ00tYIxzjOpFclYEg01Trw9g'],
+  ['Arizona Biltmore','Hospitality Concept Film','Biltmore Night/BiltmoreNight Hero1.png','arizona-biltmore','Biltmore Night/BiltmoreNight Gif.gif','https://player.mux.com/hGxXPKU9pG8WbeuZ6cds3iOXJ4Lu6gSsZ5cNE00ULpGo'],
+  ['Wander Luck','DTC Concept Campaign','Wanderluck/Wanderluck Hero1.png','wander-luck','Wanderluck/Wanderluck Gif.gif','https://player.mux.com/CRPiMAgPvegrKTC4V600NF02BvcsKrmYnrHQDX2iZXI4k'],
+  ['Streetlight Taco','Brand Awareness Demo','Streetlight Taco/ST Hero2.png','streetlight-taco','Streetlight Taco/ST Gif.gif','https://player.mux.com/al9LlSqxes11ujNV02t00sVBrTnud8jG6mEOg2awGmkdk'],
+  ['Jay Luigi','Brand Awareness Demo','Jay Luigi/JL Hero2.png','jay-luigi','Jay Luigi/JL Hero Gif.gif','https://player.mux.com/tSjhQfpRJauZ100l00FwyPmorekhEQqF007Za8m2I5g01CY'],
+  ['Astro Bites','Brand Launch Demo','Dog AstroBites/AstroBites Cover.png','astro-bites','Dog AstroBites/AstroBites Gif.gif','https://player.mux.com/NJkxwrk2X2tmwTDFXhwRHP295Mtnrm3kN4qaL3UpZoA'],
+  ['Honey Beer','Brand Launch Demo','HoneyBeer/HoneybeerFrame1.png','honey-beer','HoneyBeer/HoneyBeer Gif.gif','https://player.mux.com/30226mRiCaunMpEmaRqKm6LoL1hWBa9KdgzrnxEX2O02k'],
+  ['Event Planning','Experiential Brand Film','Event/Event Frame4.png','event-planning','Event/Event Gif.gif','https://player.mux.com/JAU007r9AQbitiSAhnWDUn4IL00m4cQEtylCETjruPK6s'],
+  ['VegasBuilder','App Acquisition & Positioning','Vegas Builder/VegasBuilders Frame1.png','vegasbuilder','Vegas Builder/VegasBuilders Gif.gif','https://player.mux.com/p02sa9ZsSPXNnmamCythJMmF6p1FW9YKm3yW01BUeDsjs'],
+  ['BidSlam','Direct-Response E-Commerce','Bidslam/Bidslam Frame1.png','bidslam','Bidslam/Bidslam Gif.gif','https://player.mux.com/y8s38WeP8hrLsRgPECjH55gWL1IBaVoqoys0200onqHoY'],
+  ['Prophet X','Category Reframe & User Conversion','Phophet X/ProphetX Frame1.png','prophet-x','Phophet X/ProphetX Gif.gif','https://player.mux.com/bh9uJIEDeyF2sd02D676SpJ00tYIxzjOpFclYEg01Trw9g'],
 ];
 /* The page's teal, in place of Mux's pink. */
 const ACCENT = '#2ee6c4';
+/* The folder and file names carry spaces, which a URL must not. */
+function asset(path) {
+  return './assets/' + encodeURI(path);
+}
 /* "any" tries to start with sound and falls back to muted where a browser refuses, as Safari can for
    a player inside an iframe. A link that already names these keeps its own. */
 function filmSrc(link) {
@@ -310,11 +304,11 @@ class Component extends DCLogic {
     const last = WORK.length - 1;
     const items = WORK.map(([title, meta, img, slug, gif, video], i) => {
       const full = layout === 'Featured' && (i === 0 || (cols === 2 && i === last && last % 2 === 1));
-      const gifUrl = 'https://framerusercontent.com/assets/' + gif;
+      const gifUrl = asset(gif);
       return {
         num: String(i + 1).padStart(2, '0'),
         title, meta,
-        img: (window.__resources && window.__resources['work' + (i + 1)]) || ('https://framerusercontent.com/images/' + img + '?width=1600'),
+        img: asset(img),
         href: link ? 'https://creativedirection.ai/work/' + slug : undefined,
         enter: (e) => this.playGif(e.currentTarget, gifUrl),
         leave: (e) => this.stopGif(e.currentTarget),
