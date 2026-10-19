@@ -1,0 +1,3967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- A client's address is their key to their brief: kept out of search. -->
+<meta name="robots" content="noindex">
+<title>Welcome — Plexus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<!--
+    CLIENT WELCOME — Plexus
+
+    The Plexus copy of creative_directions/client_welcome.tsx, for GitHub
+    Pages: ctvbuyer/ctv-buyer-client-welcome.html with Plexus's name, logo
+    and address, and nothing else changed. The behaviour is that component's,
+    line for line: the three stages, the brief written into Supabase as the
+    client goes (load, save, upload, sign, confirm, remove, submit, create,
+    through the client-brief edge function), the cache on the device, the
+    review blocks and the deliverables. Only the look is Plexus's, which is
+    the showcase's: its blue gradient sheet, Plus Jakarta Sans and JetBrains
+    Mono, the teal accent, the logo header.
+
+    A change to the component's behaviour, its items (NEEDS) or its copy
+    belongs here too, and in the CTVBuyer page, and the other way round.
+    Framer's property controls are the CONFIG block at the top of the script
+    below.
+
+    The address: a client's page is /welcome/{name}-{slug}, the name any
+    number of hyphen-joined words (client, client-name,
+    client-name-surname), the slug six letters and digits (getClientSlugFromPath, below), where the
+    component's tail is eight. The words before the slug name the client,
+    as there, and the brief is filed under the whole last part, lowercased
+    (client-name-a8kx92), as the component files it. GitHub Pages has no file at
+    /welcome/…, so it serves 404.html, which fetches this page and draws it
+    in place, leaving the address in the bar as it was opened. Opened as
+    itself, or at /welcome/, the page welcomes a guest.
+-->
+<style>
+html,
+body {
+    margin: 0;
+    background: #03192c;
+}
+
+#root {
+    min-height: 100vh;
+}
+
+/* Every rule below starts with the root's class, as in the component. */
+.cd-welcome {
+    --cw-fg: #e9edf5;
+    --cw-fg-hover: #6fa8ff;
+    --cw-ink: #03192c;
+    --cw-light: #dbe5f3;
+    --cw-soft: #c3d2e8;
+    --cw-muted: #a9bedc;
+    --cw-dim: #8ea5c6;
+    --cw-done: rgba(255, 255, 255, 0.42);
+    --cw-dash: rgba(255, 255, 255, 0.34);
+    --cw-line: rgba(255, 255, 255, 0.26);
+    --cw-rule: rgba(255, 255, 255, 0.18);
+    --cw-surface: rgba(3, 25, 44, 0.55);
+    --cw-field: rgba(3, 25, 44, 0.42);
+    --cw-sans: "Plus Jakarta Sans", Helvetica, sans-serif;
+    --cw-mono: "JetBrains Mono", monospace;
+
+    /* The layout is chosen by the page's own width through container
+       queries, as the component's is: 810 flips the phone board to the
+       desktop one, 1024 parts the brief into two columns. */
+    container: cd-welcome / inline-size;
+    width: 100%;
+    overflow-x: clip;
+    color: var(--cw-fg);
+    font-family: var(--cw-sans);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: normal;
+    text-align: left;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+.cd-welcome, .cd-welcome *, .cd-welcome *::before, .cd-welcome *::after {
+    box-sizing: border-box;
+}
+
+.cd-welcome h1, .cd-welcome h2, .cd-welcome p, .cd-welcome figure {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+}
+
+.cd-welcome button {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.cd-welcome input, .cd-welcome textarea {
+    margin: 0;
+    font: inherit;
+    letter-spacing: inherit;
+}
+
+.cd-welcome a {
+    color: var(--cw-fg);
+    text-decoration: none;
+}
+
+.cd-welcome a:hover {
+    color: var(--cw-fg-hover);
+}
+
+.cd-welcome a:focus-visible,
+.cd-welcome button:focus-visible,
+.cd-welcome input:focus-visible,
+.cd-welcome textarea:focus-visible {
+    outline: 2px solid var(--cw-accent);
+    outline-offset: 4px;
+}
+
+.cd-welcome svg {
+    display: block;
+    flex: none;
+}
+
+/* THE SHEET — Plexus's grid and glow over the blue gradient. A child of
+   the root, not the root: a container query can't style the container
+   itself, and the phone needs wider glows than the desktop board. */
+.cd-welcome .cw-sheet {
+    min-height: 100vh;
+    background-color: #06306b;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        radial-gradient(ellipse 130% 7% at 28% 8%, rgba(30, 220, 175, 0.34), transparent 70%),
+        radial-gradient(ellipse 140% 8% at 78% 44%, rgba(0, 210, 195, 0.28), transparent 70%),
+        radial-gradient(ellipse 120% 9% at 20% 85%, rgba(40, 160, 255, 0.26), transparent 70%),
+        linear-gradient(168deg, #03192c 0%, #063a7a 32%, #0a5cb0 62%, #0b86b8 100%);
+    background-size: 76px 76px, 76px 76px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+}
+
+.cd-welcome .cw-page {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 24px 40px;
+}
+
+/* HEADER — the logo, and the way into the showcase. */
+.cd-welcome .cw-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    min-height: 44px;
+    font-family: var(--cw-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--cw-muted);
+}
+
+/* The wordmark is wider than CTVBuyer's (1480 × 267): at 28px tall it
+   and CREATIVE SHOWCASE fill a 390 phone, so on a narrower one the logo
+   gives up width, scaled whole, rather than push the link off the edge. */
+.cd-welcome .cw-logo {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.cd-welcome .cw-logo img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: 28px;
+    object-fit: contain;
+    object-position: left center;
+}
+
+.cd-welcome .cw-showcase {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: var(--cw-muted);
+    white-space: nowrap;
+    transition: color 200ms ease;
+}
+
+.cd-welcome .cw-showcase:hover {
+    color: var(--cw-fg);
+}
+
+.cd-welcome .cw-showcase-arrow {
+    letter-spacing: 0;
+    color: var(--cw-accent);
+}
+
+/* EYEBROW — the numbered section label */
+.cd-welcome .cw-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--cw-mono);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    color: var(--cw-muted);
+}
+
+.cd-welcome .cw-eyebrow-num {
+    color: var(--cw-accent);
+}
+
+/* 01 WELCOME */
+.cd-welcome .cw-welcome {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 56px;
+}
+
+/* 52px on the phone, and scaled below it so a long client name still
+   breaks by word on a small phone. */
+.cd-welcome .cw-h1 {
+    font-size: min(52px, 100cqw * 52 / 390);
+    font-weight: 500;
+    line-height: 0.96;
+    letter-spacing: -0.04em;
+    overflow-wrap: break-word;
+}
+
+.cd-welcome .cw-sig {
+    font-family: var(--cw-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--cw-muted);
+    white-space: nowrap;
+}
+
+/* SECTION HEADS */
+.cd-welcome .cw-head {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cd-welcome .cw-h2 {
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+}
+
+.cd-welcome .cw-head-note {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--cw-soft);
+}
+
+/* The desktop board breaks the note before its last sentence. */
+.cd-welcome .cw-br {
+    display: none;
+}
+
+/* 02 YOUR PROJECT */
+.cd-welcome .cw-stages {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-top: 96px;
+}
+
+.cd-welcome .cw-stage-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.cd-welcome .cw-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+}
+
+.cd-welcome .cw-rail {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--cw-rule);
+}
+
+.cd-welcome .cw-stage[data-state="done"] .cw-rail {
+    background: var(--cw-done);
+}
+
+.cd-welcome .cw-stage[data-state="current"] .cw-rail {
+    background: var(--cw-accent);
+}
+
+.cd-welcome .cw-stage-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--cw-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--cw-muted);
+}
+
+.cd-welcome .cw-stage-here {
+    color: var(--cw-accent);
+}
+
+.cd-welcome .cw-stage-title {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--cw-fg);
+}
+
+.cd-welcome .cw-stage[data-state="next"] .cw-stage-title {
+    color: var(--cw-muted);
+}
+
+.cd-welcome .cw-stage-body {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--cw-soft);
+}
+
+/* 03 YOUR BRIEF
+   scroll-margin-top: the air left above the eyebrow when a send brings
+   the section back into view. */
+.cd-welcome .cw-brief {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-top: 96px;
+    scroll-margin-top: 40px;
+}
+
+.cd-welcome .cw-brief-list {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.cd-welcome .cw-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.cd-welcome .cw-progress-label {
+    font-family: var(--cw-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--cw-soft);
+}
+
+.cd-welcome .cw-bar {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--cw-rule);
+    overflow: hidden;
+}
+
+.cd-welcome .cw-bar-fill {
+    height: 100%;
+    background: var(--cw-accent);
+    transition: width 300ms ease;
+}
+
+.cd-welcome .cw-saved {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--cw-muted);
+}
+
+/* The server couldn't be reached, or a save failed: in the accent, as
+   the send's own error is. */
+.cd-welcome .cw-saved[data-tone="loud"],
+.cd-welcome .cw-notice {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--cw-accent);
+}
+
+.cd-welcome .cw-needs {
+    display: flex;
+    flex-direction: column;
+}
+
+.cd-welcome .cw-need {
+    border-top: 1px solid var(--cw-rule);
+}
+
+.cd-welcome .cw-need-toggle {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 12px;
+    align-items: start;
+    width: 100%;
+    padding: 20px 0;
+    color: var(--cw-fg);
+}
+
+.cd-welcome .cw-need-num {
+    padding-top: 3px;
+    font-family: var(--cw-mono);
+    font-size: 13px;
+    color: var(--cw-muted);
+}
+
+.cd-welcome .cw-need-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.cd-welcome .cw-need-title {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.cd-welcome .cw-need-body {
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--cw-muted);
+}
+
+.cd-welcome .cw-added {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--cw-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--cw-accent);
+}
+
+.cd-welcome .cw-added svg {
+    width: 12px;
+    height: 12px;
+}
+
+.cd-welcome .cw-added-side {
+    display: none;
+}
+
+.cd-welcome .cw-need-end {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.cd-welcome .cw-chevron {
+    width: 14px;
+    height: 14px;
+    margin-top: 5px;
+    color: var(--cw-muted);
+    transition: transform 200ms ease;
+}
+
+.cd-welcome .cw-need[data-open="true"] .cw-chevron {
+    transform: rotate(180deg);
+}
+
+.cd-welcome .cw-need-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 0 0 28px;
+}
+
+.cd-welcome .cw-drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 192px;
+    padding: 20px;
+    border: 1px dashed var(--cw-dash);
+    border-radius: 8px;
+    background: var(--cw-field);
+    text-align: center;
+    transition: border-color 200ms ease;
+}
+
+.cd-welcome .cw-drop[data-over="true"] {
+    border-color: var(--cw-accent);
+}
+
+.cd-welcome .cw-drop-icon {
+    width: 26px;
+    height: 26px;
+    color: var(--cw-soft);
+}
+
+.cd-welcome .cw-drop-text {
+    display: none;
+    font-size: 17px;
+    color: var(--cw-light);
+}
+
+.cd-welcome .cw-file-input {
+    display: none;
+}
+
+/* The outlined pill: CHOOSE FILES, DOWNLOAD, START A NEW BRIEF. */
+.cd-welcome .cw-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    padding: 0 24px;
+    border: 1px solid var(--cw-fg);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--cw-fg);
+    font-family: var(--cw-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+    transition: background-color 200ms ease, color 200ms ease;
+}
+
+.cd-welcome .cw-pill:hover {
+    background: var(--cw-fg);
+    color: var(--cw-ink);
+}
+
+.cd-welcome .cw-pill[aria-disabled="true"] {
+    color: var(--cw-fg);
+    background: transparent;
+    cursor: default;
+}
+
+.cd-welcome .cw-formats {
+    font-family: var(--cw-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--cw-muted);
+}
+
+/* In the accent, as the send's own error is. */
+.cd-welcome .cw-refused {
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--cw-accent);
+}
+
+/* THE FILES on an upload item, one row each: name and size, how it
+   stands, REMOVE. On the phone the state sits under the name and REMOVE
+   spans both rows; on the desktop all three sit on one line. */
+.cd-welcome .cw-files {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cd-welcome .cw-file {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 14px;
+    row-gap: 4px;
+    align-items: center;
+    padding: 12px 14px;
+    border: 1px solid var(--cw-line);
+    border-radius: 6px;
+    background: var(--cw-field);
+}
+
+.cd-welcome .cw-file-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--cw-fg);
+}
+
+.cd-welcome .cw-file-meta {
+    font-family: var(--cw-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--cw-muted);
+}
+
+.cd-welcome .cw-file-state {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    font-family: var(--cw-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--cw-soft);
+}
+
+.cd-welcome .cw-file-state svg {
+    width: 12px;
+    height: 12px;
+    flex: none;
+}
+
+.cd-welcome .cw-file[data-state="added"] .cw-file-state,
+.cd-welcome .cw-file[data-state="failed"] .cw-file-state,
+.cd-welcome .cw-file[data-state="unfinished"] .cw-file-state {
+    color: var(--cw-accent);
+}
+
+/* RETRY and REMOVE: mono, underlined, no chrome. */
+.cd-welcome .cw-file-action {
+    font-family: var(--cw-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--cw-fg);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    white-space: nowrap;
+}
+
+.cd-welcome .cw-file-action:disabled {
+    color: var(--cw-dim);
+    text-decoration: none;
+    cursor: default;
+}
+
+.cd-welcome .cw-file-remove {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+}
+
+.cd-welcome .cw-field {
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 16px;
+    border: 1px solid var(--cw-line);
+    border-radius: 6px;
+    background: var(--cw-field);
+    color: var(--cw-fg);
+    font-family: var(--cw-sans);
+    font-size: 17px;
+    line-height: 1.5;
+    letter-spacing: normal;
+    cursor: text;
+}
+
+.cd-welcome .cw-field::placeholder {
+    color: var(--cw-dim);
+    opacity: 1;
+}
+
+.cd-welcome textarea.cw-field {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.cd-welcome .cw-next {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 22px;
+    border-radius: 999px;
+    background: var(--cw-rule);
+    color: var(--cw-fg);
+    font-family: var(--cw-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+    transition: background-color 200ms ease;
+}
+
+.cd-welcome .cw-next:hover {
+    background: var(--cw-line);
+}
+
+.cd-welcome .cw-send {
+    padding-top: 28px;
+    border-top: 1px solid var(--cw-rule);
+}
+
+.cd-welcome .cw-send-hint {
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--cw-muted);
+}
+
+/* The accent pill: SEND IT, APPROVE. */
+.cd-welcome .cw-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 60px;
+    padding: 0 24px;
+    border-radius: 999px;
+    background: var(--cw-accent);
+    color: var(--cw-ink);
+    font-family: var(--cw-mono);
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-align: center;
+    transition: filter 200ms ease;
+}
+
+.cd-welcome .cw-cta:hover {
+    color: var(--cw-ink);
+    filter: brightness(1.06);
+}
+
+.cd-welcome .cw-cta:disabled {
+    background: var(--cw-rule);
+    color: var(--cw-dim);
+    cursor: not-allowed;
+    filter: none;
+}
+
+.cd-welcome .cw-cta[aria-busy="true"] {
+    cursor: progress;
+    filter: none;
+}
+
+.cd-welcome .cw-cta-arrow {
+    letter-spacing: 0;
+}
+
+.cd-welcome .cw-send-error {
+    margin-top: 16px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--cw-accent);
+}
+
+.cd-welcome .cw-send-after {
+    margin-top: 16px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--cw-soft);
+}
+
+/* After a send: SENT, when, and the pill that starts the next brief. */
+.cd-welcome .cw-new-brief {
+    margin-top: 20px;
+}
+
+/* THE RECORD — the stages already passed */
+.cd-welcome .cw-record {
+    display: flex;
+    flex-direction: column;
+    margin-top: 96px;
+}
+
+.cd-welcome .cw-record-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 0;
+    border-top: 1px solid var(--cw-rule);
+    font-family: var(--cw-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--cw-soft);
+}
+
+.cd-welcome .cw-record-check {
+    display: flex;
+    color: var(--cw-accent);
+}
+
+.cd-welcome .cw-record-check svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* 03 REVIEW · DELIVER */
+.cd-welcome .cw-stage-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 48px;
+}
+
+.cd-welcome .cw-stage-section .cw-head {
+    gap: 20px;
+}
+
+.cd-welcome .cw-stage-section .cw-h2 {
+    letter-spacing: -0.035em;
+}
+
+.cd-welcome .cw-note {
+    max-width: 820px;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--cw-fg);
+}
+
+.cd-welcome .cw-review {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 32px;
+    border-top: 1px solid var(--cw-rule);
+}
+
+.cd-welcome .cw-review-label {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cd-welcome .cw-review-label > span {
+    font-family: var(--cw-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--cw-soft);
+}
+
+.cd-welcome textarea.cw-review-field {
+    min-height: 104px;
+}
+
+.cd-welcome .cw-approve {
+    gap: 14px;
+}
+
+/* APPROVED, and SENT once the brief is in: the accent outline that takes
+   the CTA's place. */
+.cd-welcome .cw-approved,
+.cd-welcome .cw-sent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 62px;
+    padding: 0 24px;
+    border: 1px solid var(--cw-accent);
+    border-radius: 999px;
+    color: var(--cw-accent);
+    font-family: var(--cw-mono);
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-align: center;
+}
+
+.cd-welcome .cw-locked-note {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--cw-muted);
+}
+
+.cd-welcome .cw-after {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--cw-soft);
+}
+
+.cd-welcome .cw-player {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cd-welcome .cw-frame {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 1px solid var(--cw-rule);
+    border-radius: 8px;
+    background: var(--cw-surface);
+}
+
+.cd-welcome .cw-frame img,
+.cd-welcome .cw-frame video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: var(--cw-ink);
+}
+
+.cd-welcome .cw-play {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    border: 1px solid var(--cw-fg);
+    border-radius: 999px;
+    color: var(--cw-fg);
+    transition: background-color 200ms ease, color 200ms ease;
+}
+
+.cd-welcome .cw-play:hover {
+    background: var(--cw-fg);
+    color: var(--cw-ink);
+}
+
+.cd-welcome .cw-play svg {
+    width: 18px;
+    height: 20px;
+}
+
+.cd-welcome .cw-frame-tag {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    font-family: var(--cw-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--cw-muted);
+}
+
+.cd-welcome .cw-round {
+    font-family: var(--cw-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--cw-accent);
+}
+
+.cd-welcome .cw-spec {
+    font-family: var(--cw-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    letter-spacing: 0.12em;
+    color: var(--cw-soft);
+}
+
+/* THE DELIVERABLES at Deliver. Their own names, so they can't take on the
+   brief's file rows above (the component shares cw-file between both). */
+.cd-welcome .cw-deliverables {
+    display: flex;
+    flex-direction: column;
+}
+
+.cd-welcome .cw-deliverable {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 20px 0;
+    border-top: 1px solid var(--cw-rule);
+}
+
+.cd-welcome .cw-deliverable-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.cd-welcome .cw-deliverable-name {
+    font-size: 17px;
+    word-break: break-all;
+}
+
+.cd-welcome .cw-deliverable-meta {
+    font-family: var(--cw-mono);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--cw-muted);
+}
+
+.cd-welcome .cw-download {
+    flex: none;
+    min-height: 46px;
+    padding: 0 22px;
+    font-size: 14px;
+}
+
+.cd-welcome .cw-closing {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--cw-soft);
+}
+
+/* 04 FROM HERE */
+.cd-welcome .cw-from {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 96px;
+    padding-top: 48px;
+    border-top: 1px solid var(--cw-rule);
+}
+
+.cd-welcome .cw-h2-big {
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.035em;
+}
+
+.cd-welcome .cw-contact {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--cw-soft);
+}
+
+.cd-welcome .cw-contact a {
+    color: var(--cw-fg);
+}
+
+.cd-welcome .cw-contact a:hover {
+    color: var(--cw-fg-hover);
+}
+
+.cd-welcome .cw-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 96px;
+    padding-top: 24px;
+    border-top: 1px solid var(--cw-rule);
+    font-family: var(--cw-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--cw-muted);
+    overflow-wrap: anywhere;
+}
+
+/* THE DESKTOP BOARD. Measurements ease down with the width from the 1200
+   column, never below the phone's value for the same thing (clamp). */
+@container cd-welcome (min-width: 810px) {
+    .cd-welcome .cw-sheet {
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+            radial-gradient(ellipse 65% 10% at 28% 12%, rgba(30, 220, 175, 0.34), transparent 70%),
+            radial-gradient(ellipse 75% 12% at 78% 46%, rgba(0, 210, 195, 0.28), transparent 70%),
+            radial-gradient(ellipse 60% 14% at 20% 85%, rgba(40, 160, 255, 0.26), transparent 70%),
+            linear-gradient(168deg, #03192c 0%, #063a7a 32%, #0a5cb0 62%, #0b86b8 100%);
+    }
+
+    /* The board's 1440 sheet with its 80px gutter, centred past Max
+       Width. */
+    .cd-welcome .cw-page {
+        max-width: var(--cw-max);
+        margin: 0 auto;
+        padding: 48px var(--cw-gutter) 56px;
+    }
+
+    .cd-welcome .cw-header {
+        height: 48px;
+        font-size: 15px;
+    }
+
+    .cd-welcome .cw-logo img {
+        height: 36px;
+    }
+
+    .cd-welcome .cw-eyebrow {
+        gap: 16px;
+        font-size: 15px;
+    }
+
+    .cd-welcome .cw-welcome {
+        gap: clamp(24px, 100cqw * 48 / 1200, 48px);
+        margin-top: clamp(56px, 100cqw * 120 / 1200, 120px);
+    }
+
+    .cd-welcome .cw-h1 {
+        max-width: 1180px;
+        font-size: clamp(52px, 100cqw * 112 / 1200, 112px);
+        line-height: 0.95;
+        letter-spacing: -0.045em;
+    }
+
+    .cd-welcome .cw-sig {
+        font-size: 15px;
+    }
+
+    .cd-welcome .cw-head {
+        gap: 20px;
+    }
+
+    .cd-welcome .cw-h2 {
+        font-size: clamp(36px, 100cqw * 64 / 1200, 64px);
+        line-height: 1;
+        letter-spacing: -0.035em;
+    }
+
+    .cd-welcome .cw-head-note {
+        font-size: 18px;
+    }
+
+    .cd-welcome .cw-br {
+        display: inline;
+    }
+
+    .cd-welcome .cw-stages {
+        gap: clamp(32px, 100cqw * 48 / 1200, 48px);
+        margin-top: clamp(96px, 100cqw * 160 / 1200, 160px);
+    }
+
+    .cd-welcome .cw-stage-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(20px, 100cqw * 32 / 1200, 32px);
+    }
+
+    .cd-welcome .cw-stage {
+        gap: 20px;
+    }
+
+    .cd-welcome .cw-stage-row {
+        font-size: 15px;
+    }
+
+    .cd-welcome .cw-stage-title {
+        font-size: clamp(24px, 100cqw * 32 / 1200, 32px);
+    }
+
+    .cd-welcome .cw-stage-body {
+        font-size: 17px;
+    }
+
+    .cd-welcome .cw-brief {
+        gap: clamp(32px, 100cqw * 48 / 1200, 48px);
+        margin-top: clamp(96px, 100cqw * 160 / 1200, 160px);
+    }
+
+    .cd-welcome .cw-progress {
+        gap: 12px;
+        margin-top: 16px;
+    }
+
+    .cd-welcome .cw-progress-label {
+        font-size: 15px;
+    }
+
+    .cd-welcome .cw-saved {
+        font-size: 16px;
+    }
+
+    .cd-welcome .cw-need-toggle {
+        grid-template-columns: 64px 1fr auto;
+        gap: 16px;
+        align-items: center;
+        padding: 22px 0;
+    }
+
+    .cd-welcome .cw-need-num {
+        padding-top: 0;
+        font-size: 15px;
+    }
+
+    .cd-welcome .cw-need-title {
+        font-size: 20px;
+        line-height: normal;
+    }
+
+    .cd-welcome .cw-need-body {
+        font-size: 17px;
+        line-height: 1.5;
+    }
+
+    .cd-welcome .cw-added {
+        gap: 8px;
+        font-size: 14px;
+    }
+
+    .cd-welcome .cw-added svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .cd-welcome .cw-added-inline {
+        display: none;
+    }
+
+    .cd-welcome .cw-added-side {
+        display: flex;
+    }
+
+    .cd-welcome .cw-chevron {
+        margin-top: 0;
+    }
+
+    /* Indented past the number column: 64 + the 16 gap. */
+    .cd-welcome .cw-need-panel {
+        gap: 16px;
+        padding: 0 0 32px 80px;
+    }
+
+    .cd-welcome .cw-drop {
+        gap: 14px;
+        min-height: 218px;
+        padding: 24px;
+    }
+
+    .cd-welcome .cw-drop-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .cd-welcome .cw-drop-text {
+        display: block;
+    }
+
+    .cd-welcome .cw-pill {
+        min-height: 46px;
+        padding: 0 22px;
+        font-size: 14px;
+    }
+
+    .cd-welcome .cw-formats {
+        font-size: 13px;
+    }
+
+    .cd-welcome .cw-refused,
+    .cd-welcome .cw-notice,
+    .cd-welcome .cw-saved[data-tone="loud"] {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .cd-welcome .cw-file {
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        column-gap: 18px;
+        padding: 12px 16px;
+    }
+
+    .cd-welcome .cw-file-name {
+        font-size: 17px;
+    }
+
+    .cd-welcome .cw-file-meta,
+    .cd-welcome .cw-file-state,
+    .cd-welcome .cw-file-action {
+        font-size: 13px;
+    }
+
+    .cd-welcome .cw-file-state svg {
+        width: 13px;
+        height: 13px;
+    }
+
+    .cd-welcome .cw-file-remove {
+        grid-column: auto;
+        grid-row: auto;
+    }
+
+    .cd-welcome .cw-next {
+        font-size: 14px;
+    }
+
+    .cd-welcome .cw-send {
+        padding-top: 32px;
+    }
+
+    .cd-welcome .cw-send-hint {
+        margin-bottom: 24px;
+        font-size: 16px;
+    }
+
+    .cd-welcome .cw-cta {
+        gap: 14px;
+        min-height: 64px;
+        padding: 0 32px;
+        font-size: 15px;
+    }
+
+    .cd-welcome .cw-send-error,
+    .cd-welcome .cw-send-after {
+        margin-top: 20px;
+        font-size: 16px;
+    }
+
+    .cd-welcome .cw-record {
+        margin-top: clamp(96px, 100cqw * 160 / 1200, 160px);
+    }
+
+    .cd-welcome .cw-record-row {
+        font-size: 15px;
+    }
+
+    .cd-welcome .cw-stage-section {
+        gap: clamp(24px, 100cqw * 40 / 1200, 40px);
+        margin-top: clamp(48px, 100cqw * 96 / 1200, 96px);
+    }
+
+    .cd-welcome .cw-stage-section .cw-h2 {
+        line-height: 1.05;
+    }
+
+    .cd-welcome .cw-note {
+        font-size: clamp(19px, 100cqw * 24 / 1200, 24px);
+    }
+
+    .cd-welcome .cw-review {
+        max-width: 820px;
+    }
+
+    .cd-welcome .cw-review-label > span {
+        font-size: 15px;
+    }
+
+    .cd-welcome .cw-approve {
+        padding: 0 24px;
+    }
+
+    .cd-welcome .cw-approved,
+    .cd-welcome .cw-sent {
+        min-height: 66px;
+        font-size: 15px;
+    }
+
+    .cd-welcome .cw-locked-note {
+        font-size: 18px;
+    }
+
+    .cd-welcome .cw-after {
+        font-size: 18px;
+    }
+
+    .cd-welcome .cw-player {
+        max-width: 960px;
+    }
+
+    .cd-welcome .cw-play {
+        width: 82px;
+        height: 82px;
+    }
+
+    .cd-welcome .cw-round {
+        font-size: 15px;
+    }
+
+    .cd-welcome .cw-spec {
+        font-size: 15px;
+    }
+
+    .cd-welcome .cw-deliverables {
+        max-width: 960px;
+    }
+
+    .cd-welcome .cw-deliverable {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .cd-welcome .cw-deliverable-name {
+        font-size: 19px;
+    }
+
+    .cd-welcome .cw-closing {
+        font-size: 18px;
+    }
+
+    .cd-welcome .cw-from {
+        gap: 24px;
+        margin-top: clamp(96px, 100cqw * 160 / 1200, 160px);
+        padding-top: clamp(48px, 100cqw * 64 / 1200, 64px);
+    }
+
+    .cd-welcome .cw-h2-big {
+        max-width: 1000px;
+        font-size: clamp(44px, 100cqw * 80 / 1200, 80px);
+        letter-spacing: -0.04em;
+    }
+
+    .cd-welcome .cw-contact {
+        font-size: 18px;
+    }
+
+    .cd-welcome .cw-footer {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 24px;
+        margin-top: clamp(96px, 100cqw * 120 / 1200, 120px);
+        font-size: 15px;
+    }
+}
+
+/* The brief's two columns: a 440px intro beside the list, on the
+   board's 80px gap. Below 1024 the list would be squeezed under 300px,
+   so it stacks under the intro instead. */
+@container cd-welcome (min-width: 1024px) {
+    .cd-welcome .cw-brief {
+        display: grid;
+        grid-template-columns: clamp(360px, 100cqw * 440 / 1200, 440px) minmax(0, 1fr);
+        gap: clamp(48px, 100cqw * 80 / 1200, 80px);
+        align-items: start;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cd-welcome *,
+    .cd-welcome *::before,
+    .cd-welcome *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* Shown only when React didn't load (see the end of the page). */
+.cw-unavailable {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 96px 24px;
+    color: #e9edf5;
+    font: 400 18px/1.55 "Plus Jakarta Sans", Helvetica, sans-serif;
+}
+
+.cw-unavailable a {
+    color: #2ee6c4;
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<noscript>
+    <div class="cw-unavailable">This page needs JavaScript. Turn it on and reload, or email
+        <a href="mailto:director@creativedirection.ai">director@creativedirection.ai</a>.</div>
+</noscript>
+
+<!-- The builds and hashes the showcase's support.js loads. -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"
+    integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z"
+    crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"
+    integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1"
+    crossorigin="anonymous"></script>
+
+<script>
+"use strict"
+
+/* -------------------------------------------------------
+   CONFIG
+   Framer's property controls for client_welcome.tsx, as
+   values. Each is what the control of the same name does
+   there; an empty string falls back to the default, as a
+   cleared control does.
+------------------------------------------------------- */
+
+const CONFIG = {
+    /* Where the project is: "Brief", "Review" or "Deliver".
+       Earlier stages fold into the record above the current one. */
+    stage: "Brief",
+
+    /* Empty, the name is read off the address: /welcome/client-name-a8Kx92
+       welcomes Client Name, /welcome/client-name-surname-a8Kx92 welcomes
+       Client Name Surname. */
+    clientName: "",
+
+    accentColor: "#2ee6c4",
+
+    /* The director's note at each stage. */
+    notes: {
+        review: "Here's the first full cut. The color isn't final. Watch the pacing, and tell me where it drags.",
+        deliver: "It's finished, and it's yours. Everything you need to put it on air is below.",
+    },
+
+    approver: {
+        name: "[APPROVER NAME]",
+        /* false: the approve button is locked and the page says who holds
+           the link. */
+        hasLink: true,
+        /* Shown in the record once the cut is approved. */
+        cutDate: "[DATE]",
+    },
+
+    /* The cut under review at Review. video plays in the frame when the play
+       button is pressed; without one the frame stays as drawn. poster is
+       a still shown before play: { src, srcSet, alt }. */
+    cut: {
+        round: 1,
+        rounds: 2,
+        video: "",
+        poster: null,
+    },
+
+    /* The finished files at Deliver. A *File is the download's URL; without
+       one the DOWNLOAD pill keeps its place but isn't a link. */
+    delivery: {
+        spec: "30 SECONDS · READY FOR STREAMING TV · 16:9 · [CAPTIONED VERSION: CONFIRM]",
+        tvName: "ArizonaBiltmore_30s_TV.mov",
+        tvMeta: "TV-READY FILE · [SIZE]",
+        tvFile: "",
+        captionedName: "ArizonaBiltmore_30s_TV_captioned.mov",
+        captionedMeta: "WITH CAPTIONS · [SIZE]",
+        captionedFile: "",
+        webName: "ArizonaBiltmore_30s_web.mp4",
+        webMeta: "FOR YOUR WEBSITE · [SIZE]",
+        webFile: "",
+    },
+
+    /* Changes the line under the brief's progress bar. With an Endpoint,
+       the brief is saved to Supabase as it is written either way. */
+    savesProgress: true,
+
+    /* The client-brief edge function (supabase/functions/client-brief):
+       https://<project-ref>.supabase.co/functions/v1/client-brief. It
+       answers only the origins in its ALLOWED_ORIGINS secret, so this
+       page's (https://plexus.creativedirection.ai) must be one of them.
+       Empty, the brief stays in the visitor's browser and SEND IT follows
+       links.send instead. anonKey: the project's public anon key, needed
+       only if the function is deployed with JWT checks on. */
+    submission: {
+        endpoint: "https://sjdwcghqqfydxyzvrvki.supabase.co/functions/v1/client-brief",
+        anonKey: "",
+    },
+
+    /* The whole page's, padding included, and the gutter inside it on
+       desktop, easing down to the phone's 24 on narrower screens. */
+    maxWidth: 1440,
+    padding: 80,
+
+    showFooter: true,
+
+    links: {
+        /* Shown under FROM HERE and linked as mail. */
+        contact: "director@creativedirection.ai",
+        /* Where SEND IT TO THE DIRECTOR goes with no Endpoint. */
+        send: "mailto:director@creativedirection.ai",
+        /* The header's way into the showcase, from the site's root, and
+           where the logo goes. On the live site the showcase is the root's
+           index.html. */
+        showcase: "./",
+    },
+}
+
+/* -------------------------------------------------------
+   THE CLIENT'S ADDRESS
+   /welcome/{name}-{slug}: the name one or more words of
+   letters and digits joined by hyphens (client,
+   client-name, client-name-surname), the slug exactly six
+   letters and digits. Nothing else is a client's address:
+   not a shorter or longer slug, no name, not a trailing
+   slash, not another folder. Outside the page's own
+   scope, so it can be tried from the console.
+------------------------------------------------------- */
+
+const CLIENT_PATH = /^\/welcome\/(?:[A-Za-z0-9]+-)+([A-Za-z0-9]{6})$/
+
+/* "/welcome/client-name-a8Kx92", "/welcome/client-a8Kx92" → "a8Kx92", its
+   case kept; null for any other path. */
+function getClientSlugFromPath(pathname = window.location.pathname) {
+    const match = CLIENT_PATH.exec(pathname)
+    return match ? match[1] : null
+}
+
+;(function () {
+    if (!window.React || !window.ReactDOM) {
+        document.getElementById("root").innerHTML =
+            '<div class="cw-unavailable">This page didn\'t load. Reload it, or email ' +
+            '<a href="mailto:director@creativedirection.ai">director@creativedirection.ai</a>.</div>'
+        return
+    }
+
+    const React = window.React
+    const h = React.createElement
+    const Fragment = React.Fragment
+
+    const SCOPE = "cd-welcome"
+
+    /* -------------------------------------------------------
+       THE ADDRESS
+       404.html draws this page in place at /welcome/ and at a
+       client's address, so the bar keeps what the visitor
+       opened. Assets are found from the site's root, not from
+       the address: under /welcome/… a relative link would
+       resolve inside a welcome/ folder that doesn't exist.
+    ------------------------------------------------------- */
+
+    /* /welcome, /welcome/ or a client's address, at the end of the path. */
+    const WELCOME_PATH = /\/welcome(?:\/(?:(?:[A-Za-z0-9]+-)+[A-Za-z0-9]{6})?)?$/
+
+    /* Where the page is served from: the folder of this file, or, at a
+       welcome address, the folder above welcome/. */
+    const SITE_ROOT = (() => {
+        const here = window.location.pathname.match(WELCOME_PATH)
+        return here
+            ? new URL(window.location.pathname.slice(0, here.index + 1), window.location.href)
+            : new URL(".", window.location.href)
+    })()
+    const siteUrl = (path) => new URL(path, SITE_ROOT).href
+
+    /* The address as the footer shows it. */
+    const SITE_LABEL = (window.location.host || "plexus.creativedirection.ai").toUpperCase()
+    const DIRECTOR_EMAIL = "director@creativedirection.ai"
+
+    /* -------------------------------------------------------
+       CONTENT
+       The component's, word for word.
+    ------------------------------------------------------- */
+
+    /* No durations on the stages: the page makes no promise of how long
+       each one takes. */
+    const STAGES = [
+        {
+            title: "Brief",
+            body: "You share your brand files, photos, and goals. We confirm exactly what we're making.",
+        },
+        {
+            title: "Review",
+            body: "We show you the work and refine it with your feedback, round by round, until you're satisfied.",
+        },
+        {
+            title: "Deliver",
+            body: "Your finished spot, ready to air on CTV. This page becomes the permanent record of exactly what you approved.",
+        },
+    ]
+
+    /* The stages before Review took the place of Direction and Build. A
+       CONFIG still set to either is under review, not back at the brief:
+       falling to Brief would hand a client mid-project an open brief. */
+    const LEGACY_STAGES = {
+        Direction: "Review",
+        Build: "Review",
+    }
+
+    /* Mirrors NEEDS in client_welcome.tsx, and through it UPLOAD_ITEMS,
+       ANSWERS and FIRST_ITEM in the edge function: an id or a type changed
+       here alone is refused by the server. */
+    const NEEDS = [
+        {
+            id: "logo",
+            kind: "upload",
+            title: "Your logo and brand guidelines",
+            body: "Logo files, brand colors, fonts, and any rules your team follows.",
+            formats: "PDF · JPG · SVG · PNG",
+        },
+        {
+            id: "media",
+            kind: "upload",
+            title: "Photos of what we are featuring",
+            body: "Real images of your property or product. We build the world around them, never replace them.",
+            formats: "JPG · PNG",
+        },
+        {
+            id: "refs",
+            kind: "long",
+            title: "Spots you like",
+            body: "Commercials you love, and any you would never want to look like.",
+            hint: "Paste links, one per line. Add a word on what you like about each.",
+        },
+        {
+            id: "objective",
+            kind: "short",
+            title: "What should this spot make happen?",
+            body: "The one thing a viewer should know or do after thirty seconds.",
+            hint: "e.g. Book a fall getaway",
+        },
+        {
+            id: "audience",
+            kind: "short",
+            title: "Who is this for?",
+            body: "The people you most want to reach.",
+            hint: "e.g. couples planning a getaway, 35 to 55",
+        },
+        {
+            id: "tone",
+            kind: "short",
+            title: "Tone, in three words",
+            body: "How should someone feel after watching?",
+            hint: "e.g. unhurried, warm, confident",
+        },
+        {
+            id: "rules",
+            kind: "long",
+            title: "Must-haves and never-dos",
+            body: "Taglines, claims, legal lines, and anything off-limits.",
+            hint: "One per line",
+        },
+        {
+            id: "approvers",
+            kind: "short",
+            title: "Who approves",
+            body: "Who signs off at each stage, so feedback arrives once, in one voice.",
+            hint: "Names and roles",
+        },
+        {
+            id: "email",
+            kind: "email",
+            title: "Where should we send updates?",
+            body: "The email address we write to as your project moves through each stage.",
+            hint: "e.g. name@yourcompany.com",
+        },
+    ]
+
+    const DEFAULT_NOTES = {
+        review: "Here's the first full cut. The color isn't final. Watch the pacing, and tell me where it drags.",
+        deliver: "It's finished, and it's yours. Everything you need to put it on air is below.",
+    }
+
+    const DEFAULT_APPROVER = {
+        name: "[APPROVER NAME]",
+        hasLink: true,
+        cutDate: "[DATE]",
+    }
+
+    const DEFAULT_CUT = {
+        round: 1,
+        rounds: 2,
+    }
+
+    const DEFAULT_DELIVERY = {
+        spec: "30 SECONDS · READY FOR STREAMING TV · 16:9 · [CAPTIONED VERSION: CONFIRM]",
+        tvName: "ArizonaBiltmore_30s_TV.mov",
+        tvMeta: "TV-READY FILE · [SIZE]",
+        captionedName: "ArizonaBiltmore_30s_TV_captioned.mov",
+        captionedMeta: "WITH CAPTIONS · [SIZE]",
+        webName: "ArizonaBiltmore_30s_web.mp4",
+        webMeta: "FOR YOUR WEBSITE · [SIZE]",
+    }
+
+    const DEFAULT_LINKS = {
+        contact: DIRECTOR_EMAIL,
+        send: `mailto:${DIRECTOR_EMAIL}`,
+        showcase: "./",
+    }
+
+    /* -------------------------------------------------------
+       HELPERS
+    ------------------------------------------------------- */
+
+    const pad = (n) => String(n + 1).padStart(2, "0")
+
+    /* "PDF · JPG · SVG · PNG" → ["pdf", "jpg", "jpeg", "svg", "png"]: the
+       extensions an item takes, as UPLOAD_ITEMS in the edge function lists
+       them. A JPG may also be named .jpeg. */
+    const extensionsFor = (formats) =>
+        formats
+            .split("·")
+            .map((f) => f.trim().toLowerCase())
+            .filter(Boolean)
+            .flatMap((f) => (f === "jpg" ? ["jpg", "jpeg"] : [f]))
+
+    /* ".pdf,.jpg,.jpeg,.svg,.png" for the file picker. */
+    const acceptFor = (formats) =>
+        extensionsFor(formats)
+            .map((f) => `.${f}`)
+            .join(",")
+
+    /* The picker's filter can be switched off and a drop ignores it, so each
+       file is checked again here: a video dropped on the photos is turned
+       away at once, not at SEND IT, where the function would refuse the
+       whole brief over it. */
+    const takes = (formats, name) =>
+        name.includes(".") &&
+        extensionsFor(formats).includes(name.split(".").pop().toLowerCase())
+
+    const refusedSummary = (names, formats) =>
+        `Not added: ${names.join(", ")}. We take ${formats} here.`
+
+    /* -------------------------------------------------------
+       THE CLIENT
+       Named by the page's address, so one page serves every
+       client: the words before the slug are the name, unless
+       CONFIG.clientName says otherwise. The whole last part,
+       lowercased (CLIENT_KEY), keys the brief on the server
+       and its cache on this device, as the component's slug
+       does, so the function finds the same draft from either
+       page and two clients on one device keep two briefs.
+       With no slug the page welcomes a guest.
+    ------------------------------------------------------- */
+
+    const GUEST = "Dear Guest"
+
+    /* Read once, before the first render: there is no server render here
+       to match, so the page never shows a guest greeting first. */
+    const CLIENT_SLUG = getClientSlugFromPath()
+
+    /* The address's last part, "client-name-a8Kx92", on a client's page. */
+    const CLIENT_PAGE = CLIENT_SLUG ? window.location.pathname.split("/").pop() : ""
+
+    /* "client-name-a8kx92": what the function files the brief under. The
+       function lowercases a slug, so the cache key is lowercased too, and
+       /welcome/Client-Name-A8KX92 is the same client's page. */
+    const CLIENT_KEY = CLIENT_PAGE.toLowerCase()
+
+    /* "client-name-a8Kx92" → "Client Name", "client-name-surname-a8Kx92" →
+       "Client Name Surname": the words before "-{slug}". */
+    const CLIENT_NAME = CLIENT_SLUG
+        ? CLIENT_PAGE.slice(0, -(CLIENT_SLUG.length + 1))
+              .toLowerCase()
+              .split("-")
+              .filter(Boolean)
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ")
+        : ""
+
+    /* -------------------------------------------------------
+       THE BRIEF ON THE SERVER
+       The brief lives in Supabase from the first keystroke, in
+       the one client_briefs row the client-brief edge function
+       keeps per client, so a client can start on one device
+       and carry on from another. "load" fetches the client's
+       draft, making one on a first visit; "save" writes the
+       typed answers as they change; "upload" adds a file and
+       signs it an upload token, and "confirm" and "remove"
+       finish and drop one. Between upload and confirm the file
+       goes from the browser straight to Supabase Storage.
+       "submit" sends the brief, and "create" starts the next
+       one after a send.
+
+       The server copy is the brief. Every save carries the
+       version the page loaded, and a save over a newer version
+       is refused with the newer brief, which the page then
+       shows. Files are added and removed one at a time, each
+       call answering with the whole list, so the page always
+       shows the server's.
+    ------------------------------------------------------- */
+
+    /* Mirrors MAX_ANSWER_CHARS in the function. The fields stop there, so
+       nothing is cut off on the way in. */
+    const MAX_ANSWER_CHARS = 5000
+
+    /* Mirrors EMAIL in the function, which refuses a send whose address
+       fails it. Loose on purpose: it catches a slip — no @, no dot after
+       it, a space — and only writing to an address proves it. */
+    const MAX_EMAIL_CHARS = 254
+    const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+    const looksLikeEmail = (value) => value.length <= MAX_EMAIL_CHARS && EMAIL.test(value)
+
+    /* How long one call to the function may take. */
+    const CALL_TIMEOUT_MS = 45 * 1000
+
+    /* How long after the last keystroke the answers go to the server. */
+    const SAVE_DELAY_MS = 1000
+
+    /* The waits before a failed save or load is tried again, the last one
+       repeating. */
+    const RETRY_MS = [3000, 8000, 15000, 30000, 60000]
+
+    const SEND_FAILED = "That didn't go through. Try again, or email us."
+    const OFFLINE = "We couldn't reach the server. Check your connection and try again."
+    const UNREACHABLE = "We couldn't reach the server. Check your connection; we'll keep trying."
+    const SAVE_FAILED = "Couldn't save. Trying again."
+    const NOT_SAVED = "We couldn't save your answers. Check your connection and try again."
+    const CHANGED_ELSEWHERE = "This brief was updated on another device. Showing the latest."
+    const CHANGED_BEFORE_SEND = "This brief was updated on another device. Check it, then send again."
+    const UNFINISHED = "Some files didn't finish uploading. Add them again, or remove them."
+    const BAD_EMAIL = "That email address doesn't look right. Check it, or leave it blank."
+
+    /* An error whose message is written for the page. Anything else that
+       reaches a catch is a bug, logged and shown as SEND_FAILED. */
+    class SendError extends Error {}
+
+    /* The function's answer to a refused call, with its status and whatever
+       else it said: the newer brief on a 409, the files that didn't land on
+       a refused submit. Status 0 is no answer at all: offline, or out of
+       time. */
+    class BriefError extends SendError {
+        constructor(status, message, answer = {}) {
+            super(message)
+            this.status = status
+            this.answer = answer
+        }
+    }
+
+    /* A file that didn't reach Storage after putFile's retries. */
+    class UploadError extends SendError {}
+
+    /* An upload stopped by the page itself: the file removed while it was
+       going, or chosen again. */
+    class CancelledError extends Error {}
+
+    /* keepalive lets the last save of a tab being closed go out after the
+       page is gone. */
+    async function callBrief(endpoint, anonKey, body, keepalive = false) {
+        const headers = { "Content-Type": "application/json" }
+        if (anonKey) {
+            headers.apikey = anonKey
+            headers.Authorization = `Bearer ${anonKey}`
+        }
+        const controller = new AbortController()
+        const timer = setTimeout(() => controller.abort(), CALL_TIMEOUT_MS)
+        let res
+        try {
+            res = await fetch(endpoint, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(body),
+                signal: controller.signal,
+                keepalive,
+            })
+        } catch {
+            throw new BriefError(0, OFFLINE)
+        } finally {
+            clearTimeout(timer)
+        }
+        const data = await res.json().catch(() => null)
+        const answer = data && typeof data === "object" ? data : {}
+        if (!res.ok) {
+            /* The function's own refusals (a bad file, a newer brief) are
+               worded for the page. A 5xx may be the gateway in front of it,
+               whose text isn't. */
+            const message =
+                typeof answer.error === "string" && res.status < 500 ? answer.error : SEND_FAILED
+            throw new BriefError(res.status, message, answer)
+        }
+        return answer
+    }
+
+    const TYPED_IDS = NEEDS.filter((need) => need.kind !== "upload").map((need) => need.id)
+    const UPLOAD_IDS = NEEDS.filter((need) => need.kind === "upload").map((need) => need.id)
+
+    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+    const isRecord = (value) =>
+        typeof value === "object" && value !== null && !Array.isArray(value)
+
+    /* A files list from the function, checked before anything is shown on
+       its say-so: { id, item, name, size, status } each, status "uploading"
+       from the moment the file is added until confirm has checked it is in
+       Storage. Null when it isn't one. */
+    function parseFiles(value) {
+        if (!Array.isArray(value)) return null
+        const files = []
+        for (const entry of value) {
+            if (!isRecord(entry)) return null
+            const { id, item, name, size, status } = entry
+            if (
+                typeof id !== "string" ||
+                typeof item !== "string" ||
+                typeof name !== "string" ||
+                typeof size !== "number" ||
+                (status !== "uploading" && status !== "uploaded")
+            ) {
+                return null
+            }
+            files.push({ id, item, name, size, status })
+        }
+        return files
+    }
+
+    /* The brief as the server holds it: { id, status ("draft" or
+       "submitted"), version, submittedAt, open, answers, files }. */
+    function parseBrief(value) {
+        if (!isRecord(value)) return null
+        const files = parseFiles(value.files)
+        if (
+            typeof value.id !== "string" ||
+            !UUID_RE.test(value.id) ||
+            (value.status !== "draft" && value.status !== "submitted") ||
+            typeof value.version !== "number" ||
+            !files
+        ) {
+            return null
+        }
+        const answers = {}
+        if (isRecord(value.answers)) {
+            for (const id of TYPED_IDS) {
+                const answer = value.answers[id]
+                if (typeof answer === "string" && answer) {
+                    answers[id] = answer.slice(0, MAX_ANSWER_CHARS)
+                }
+            }
+        }
+        const open =
+            typeof value.open === "string" && NEEDS.some((need) => need.id === value.open)
+                ? value.open
+                : null
+        return {
+            id: value.id,
+            status: value.status,
+            version: value.version,
+            submittedAt: typeof value.submittedAt === "string" ? value.submittedAt : null,
+            open,
+            answers,
+            files,
+        }
+    }
+
+    /* upload's answer: the new file, the whole list with it, and where to
+       put it — Storage's signed upload endpoint, the bucket, the file's own
+       path there, the type to send it as, and the token that lets one PUT
+       write it. */
+    function parseUpload(answer) {
+        const file = parseFiles([answer.file])?.[0]
+        const files = parseFiles(answer.files)
+        const { endpoint, bucket, path, contentType, token } = answer
+        if (
+            !file ||
+            !files ||
+            typeof endpoint !== "string" ||
+            typeof bucket !== "string" ||
+            typeof path !== "string" ||
+            typeof contentType !== "string" ||
+            typeof token !== "string"
+        ) {
+            throw new Error("Unexpected answer to upload")
+        }
+        return { file, files, upload: { endpoint, bucket, path, contentType, token } }
+    }
+
+    /* The waits before each retry of a failed file: about two minutes in
+       all, so Wi-Fi that drops out for a while doesn't lose the file. A
+       retry sends the whole file again. */
+    const RETRY_DELAYS = [0, 1000, 3000, 5000, 10000, 20000, 30000, 60000]
+
+    /* A request that has sent nothing and heard nothing for this long is
+       given up on and retried, rather than left frozen at one percentage. */
+    const STALL_MS = 2 * 60 * 1000
+
+    /* A dropped or stalled connection (status 0), too many requests, or the
+       server's own trouble. */
+    const retryable = (status) => status === 0 || status === 429 || status >= 500
+
+    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+    /* Storage answers most refusals with a 400 and puts the real status in
+       the body. */
+    function storageStatus(xhr) {
+        try {
+            return Number(JSON.parse(xhr.responseText).statusCode) || xhr.status
+        } catch {
+            return xhr.status
+        }
+    }
+
+    /* The page's hold on an upload in progress: abort stops the request
+       that is going and marks the upload cancelled, so putFile doesn't
+       retry it. */
+    function newHandle() {
+        const handle = {
+            cancelled: false,
+            abort: () => {
+                handle.cancelled = true
+            },
+        }
+        return handle
+    }
+
+    /* XHR rather than fetch for its upload progress. Resolves with every
+       answer; a failed, stalled or aborted connection shows as status 0. */
+    function sendFile(url, file, contentType, onProgress, handle) {
+        return new Promise((resolve) => {
+            const xhr = new XMLHttpRequest()
+            let timer
+            const watch = () => {
+                clearTimeout(timer)
+                timer = setTimeout(() => xhr.abort(), STALL_MS)
+            }
+            const done = () => {
+                clearTimeout(timer)
+                handle.abort = () => {
+                    handle.cancelled = true
+                }
+                resolve(xhr)
+            }
+            handle.abort = () => {
+                handle.cancelled = true
+                xhr.abort()
+            }
+            xhr.open("PUT", url)
+            xhr.setRequestHeader("Content-Type", contentType)
+            xhr.upload.onprogress = (e) => {
+                watch()
+                onProgress(e.loaded)
+            }
+            xhr.onload = done
+            xhr.onerror = done
+            xhr.onabort = done
+            watch()
+            xhr.send(file)
+        })
+    }
+
+    /* Each file goes to Storage whole, in one request to its signed upload
+       URL. The type comes from the function, by extension, rather than the
+       browser. The token lasts two hours and is checked as the request
+       starts, so a file queued behind large ones on a slow connection can
+       find its token run out: a refused one is renewed, once. */
+    async function putFile(upload, file, onProgress, renewToken, handle) {
+        const target = `${upload.endpoint}/${upload.bucket}/${upload.path
+            .split("/")
+            .map(encodeURIComponent)
+            .join("/")}`
+        let token = upload.token
+        let renewed = false
+        let tries = 0
+
+        while (true) {
+            if (handle.cancelled) throw new CancelledError()
+            const res = await sendFile(
+                `${target}?token=${encodeURIComponent(token)}`,
+                file,
+                upload.contentType,
+                onProgress,
+                handle
+            )
+            if (handle.cancelled) throw new CancelledError()
+            if (res.status >= 200 && res.status < 300) return
+            const status = storageStatus(res)
+            /* Already at its path: an earlier try landed but its answer was
+               lost. Every file has its own path, so nothing else can be
+               there, and confirm checks the size. */
+            if (status === 409) return
+            if ([400, 401, 403].includes(status) && !renewed) {
+                token = await renewToken()
+                renewed = true
+                continue
+            }
+            if (!retryable(res.status) || tries >= RETRY_DELAYS.length) {
+                throw new UploadError(`${file.name} didn't upload.`)
+            }
+            await wait(RETRY_DELAYS[tries++])
+        }
+    }
+
+    const readableSize = (bytes) =>
+        bytes >= 1024 ** 3
+            ? `${(bytes / 1024 ** 3).toFixed(1)} GB`
+            : bytes >= 1024 ** 2
+              ? `${(bytes / 1024 ** 2).toFixed(1)} MB`
+              : `${Math.max(1, Math.round(bytes / 1024))} KB`
+
+    /* "September 28, 2026", in the visitor's language. */
+    const sentOn = (iso) => {
+        const date = iso ? new Date(iso) : null
+        return date && !Number.isNaN(date.getTime())
+            ? date.toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+              })
+            : ""
+    }
+
+    /* A new id for a file kept only on this device. */
+    function newId() {
+        const c = typeof crypto !== "undefined" ? crypto : undefined
+        if (c?.randomUUID) return c.randomUUID()
+        const bytes = new Uint8Array(16)
+        if (c?.getRandomValues) c.getRandomValues(bytes)
+        else for (let i = 0; i < 16; i++) bytes[i] = Math.floor(Math.random() * 256)
+        bytes[6] = (bytes[6] & 0x0f) | 0x40
+        bytes[8] = (bytes[8] & 0x3f) | 0x80
+        const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("")
+        return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
+    }
+
+    /* -------------------------------------------------------
+       THE CACHE ON THIS DEVICE
+       The typed answers, which item is open and the files on
+       the brief are kept in localStorage as they change, one
+       entry per client. With a server, this is only a cache:
+       it is what the page shows, read-only, when the server
+       can't be reached — the server's copy replaces it as
+       soon as it arrives, whatever the cache said. Without a
+       server (no Endpoint, or a guest) it is the draft.
+
+       The files themselves are never kept. A file restored
+       from the cache is listed as one to add again, until the
+       server says it is in. Every read and write is guarded,
+       and a page that can't use storage works from memory.
+       The entry is removed once the brief is sent.
+    ------------------------------------------------------- */
+
+    /* Bumped when the shape of a saved entry changes; parseStoredBrief is
+       where an older one would be brought up to date. */
+    const STORE_VERSION = 2
+
+    /* One entry per client, so a page that welcomes two clients on one
+       machine keeps their briefs apart. */
+    const storeKeyFor = (slug) => `${SCOPE}:brief:${slug || "guest"}`
+
+    /* How long after a change the cache is written. */
+    const CACHE_DELAY_MS = 500
+
+    /* The brief as the page first shows it. */
+    const EMPTY_DRAFT = { open: NEEDS[0].id, answers: {}, files: [] }
+
+    /* localStorage, or null where there is none or touching it throws. */
+    function storage() {
+        try {
+            return window.localStorage ?? null
+        } catch {
+            return null
+        }
+    }
+
+    /* A saved entry, checked field by field: anything hand-edited into a
+       shape the page can't use is dropped. Files come back as ones to add
+       again: the File objects are gone with the page that had them. */
+    function parseStoredBrief(raw) {
+        let data
+        try {
+            data = JSON.parse(raw)
+        } catch {
+            return null
+        }
+        if (!isRecord(data) || data.version !== STORE_VERSION || !isRecord(data.draft)) {
+            return null
+        }
+        const { draft } = data
+        const answers = {}
+        if (isRecord(draft.answers)) {
+            for (const id of TYPED_IDS) {
+                const value = draft.answers[id]
+                if (typeof value === "string" && value) {
+                    answers[id] = value.slice(0, MAX_ANSWER_CHARS)
+                }
+            }
+        }
+        const files = (parseFiles(draft.files) ?? [])
+            .filter((file) => UPLOAD_IDS.includes(file.item) && file.name)
+            .slice(0, 50)
+            .map((file) => ({ ...file, name: file.name.slice(0, 200), status: "uploading" }))
+        const open =
+            draft.open === null ||
+            (typeof draft.open === "string" && NEEDS.some((n) => n.id === draft.open))
+                ? draft.open
+                : NEEDS[0].id
+        return {
+            version: STORE_VERSION,
+            updatedAt: typeof data.updatedAt === "string" ? data.updatedAt : "",
+            draft: { open, answers, files },
+        }
+    }
+
+    /* The saved entry, or null when there is none or it can't be used. An
+       unusable entry is removed, so it isn't parsed again on every visit. */
+    function readStoredBrief(storeKey) {
+        const store = storage()
+        if (!store) return null
+        let raw
+        try {
+            raw = store.getItem(storeKey)
+        } catch {
+            return null
+        }
+        if (raw === null) return null
+        const stored = parseStoredBrief(raw)
+        if (!stored) {
+            try {
+                store.removeItem(storeKey)
+            } catch {
+                /* Then it stays; the next visit drops it the same way. */
+            }
+        }
+        return stored
+    }
+
+    /* Said once a page load, so a full quota or a blocked store shows in the
+       console without filling it. */
+    let warnedStore = false
+
+    /* True when the entry is on disk. */
+    function writeStoredBrief(storeKey, stored) {
+        const store = storage()
+        if (!store) return false
+        try {
+            store.setItem(storeKey, JSON.stringify(stored))
+            return true
+        } catch (err) {
+            if (!warnedStore) {
+                warnedStore = true
+                console.warn("The brief couldn't be saved on this device:", err)
+            }
+            return false
+        }
+    }
+
+    function clearStoredBrief(storeKey) {
+        try {
+            storage()?.removeItem(storeKey)
+        } catch {
+            /* Nothing to do: the entry will be replaced by the next draft. */
+        }
+    }
+
+    /* -------------------------------------------------------
+       ICONS
+    ------------------------------------------------------- */
+
+    function CheckIcon() {
+        return h(
+            "svg",
+            { viewBox: "0 0 14 14", fill: "none", stroke: "currentColor", strokeWidth: "1.6", "aria-hidden": "true" },
+            h("path", { d: "M2 7.5L5.5 11L12 3.5" })
+        )
+    }
+
+    function ChevronIcon() {
+        return h(
+            "svg",
+            {
+                className: "cw-chevron",
+                viewBox: "0 0 14 14",
+                fill: "none",
+                stroke: "currentColor",
+                strokeWidth: "1.5",
+                "aria-hidden": "true",
+            },
+            h("path", { d: "M2 5L7 10L12 5" })
+        )
+    }
+
+    function UploadIcon() {
+        return h(
+            "svg",
+            {
+                className: "cw-drop-icon",
+                viewBox: "0 0 28 28",
+                fill: "none",
+                stroke: "currentColor",
+                strokeWidth: "1.5",
+                "aria-hidden": "true",
+            },
+            h("path", { d: "M14 18V5M8.5 10.5L14 5L19.5 10.5M5 19V23H23V19" })
+        )
+    }
+
+    function PlayIcon() {
+        return h(
+            "svg",
+            { viewBox: "0 0 14 16", "aria-hidden": "true" },
+            h("path", { d: "M1 1L13 8L1 15Z", fill: "currentColor" })
+        )
+    }
+
+    /* -------------------------------------------------------
+       PAGE
+    ------------------------------------------------------- */
+
+    function ClientWelcome(props) {
+        const {
+            stage = "Brief",
+            clientName = "",
+            accentColor = "#2ee6c4",
+            notes,
+            approver,
+            cut,
+            delivery,
+            savesProgress = true,
+            submission,
+            maxWidth = 1440,
+            padding = 80,
+            showFooter = true,
+            links,
+        } = props
+
+        /* CONFIG's name for the client when it has one, else the one read
+           off the address. */
+        const name = clientName.trim() || CLIENT_NAME || GUEST
+        const slug = CLIENT_KEY
+
+        const current = Math.max(
+            0,
+            STAGES.findIndex((s) => s.title === (LEGACY_STAGES[stage] ?? stage))
+        )
+
+        /* An emptied value falls back to the board's text rather than
+           leaving a hole in the page. */
+        const approverName = approver?.name || DEFAULT_APPROVER.name
+        const approverHasLink = approver?.hasLink ?? DEFAULT_APPROVER.hasLink
+        const contact = links?.contact || DEFAULT_LINKS.contact
+        const send = links?.send || DEFAULT_LINKS.send
+        const showcase = siteUrl(links?.showcase || DEFAULT_LINKS.showcase)
+
+        /* The approval lives on the page for the session: the boards flip
+           the button to its approved state on click and leave it there. */
+        const [approved, setApproved] = React.useState(false)
+
+        const rootStyle = {
+            "--cw-accent": accentColor,
+            "--cw-max": `${maxWidth}px`,
+            /* The gutter eases down with the width like everything else on
+               the desktop board, and never below the phone's 24. */
+            "--cw-gutter": `clamp(24px, 100cqw * ${padding} / 1200, ${padding}px)`,
+        }
+
+        const record = [
+            `BRIEF RECEIVED · ${NEEDS.length} OF ${NEEDS.length}`,
+            `CUT APPROVED · ROUND ${cut?.round ?? DEFAULT_CUT.round} OF ${cut?.rounds ?? DEFAULT_CUT.rounds} · ${approver?.cutDate || DEFAULT_APPROVER.cutDate}`,
+        ].slice(0, current)
+
+        return h(
+            "div",
+            { className: SCOPE, style: rootStyle },
+            h(
+                "div",
+                { className: "cw-sheet" },
+                h(
+                    "div",
+                    { className: "cw-page" },
+                    h(
+                        "header",
+                        { className: "cw-header" },
+                        h(
+                            "a",
+                            { className: "cw-logo", href: showcase },
+                            h("img", { src: siteUrl("assets/plexus-logo.png"), alt: "Plexus", width: 1480, height: 267 })
+                        ),
+                        h(
+                            "a",
+                            { className: "cw-showcase", href: showcase },
+                            h("span", null, "CREATIVE SHOWCASE"),
+                            h("span", { className: "cw-showcase-arrow", "aria-hidden": "true" }, "→")
+                        )
+                    ),
+
+                    h(
+                        "section",
+                        { className: "cw-welcome" },
+                        h(Eyebrow, { num: "01", label: "WELCOME" }),
+                        h("h1", { className: "cw-h1" }, `Welcome, ${name}.`)
+                    ),
+
+                    h(
+                        "section",
+                        { className: "cw-stages" },
+                        h(
+                            "div",
+                            { className: "cw-head" },
+                            h(Eyebrow, { num: "02", label: "YOUR PROJECT" }),
+                            h("h2", { className: "cw-h2" }, "Three stages. You approve each one.")
+                        ),
+                        h(
+                            "div",
+                            { className: "cw-stage-grid" },
+                            STAGES.map((s, i) =>
+                                h(StageCard, {
+                                    key: s.title,
+                                    num: pad(i),
+                                    title: s.title,
+                                    body: s.body,
+                                    state: i < current ? "done" : i === current ? "current" : "next",
+                                })
+                            )
+                        )
+                    ),
+
+                    current === 0
+                        ? h(BriefSection, {
+                              client: name,
+                              slug,
+                              storeKey: storeKeyFor(slug),
+                              savesProgress,
+                              send,
+                              endpoint: submission?.endpoint?.trim() ?? "",
+                              anonKey: submission?.anonKey?.trim() ?? "",
+                          })
+                        : h(
+                              "section",
+                              { className: "cw-record", "aria-label": "Earlier stages" },
+                              record.map((text) =>
+                                  h(
+                                      "div",
+                                      { className: "cw-record-row", key: text },
+                                      h("span", { className: "cw-record-check" }, h(CheckIcon)),
+                                      h("span", null, text)
+                                  )
+                              )
+                          ),
+
+                    current === 1 &&
+                        h(ReviewSection, {
+                            note: notes?.review || DEFAULT_NOTES.review,
+                            cut,
+                            approverName,
+                            hasLink: approverHasLink,
+                            approved,
+                            onApprove: () => setApproved(true),
+                        }),
+
+                    current === 2 &&
+                        h(DeliverSection, {
+                            note: notes?.deliver || DEFAULT_NOTES.deliver,
+                            delivery,
+                        }),
+
+                    h(
+                        "section",
+                        { className: "cw-from" },
+                        h(Eyebrow, { num: "04", label: "FROM HERE" }),
+                        h("h2", { className: "cw-h2-big" }, "The craft is the point."),
+                        h(
+                            "p",
+                            { className: "cw-contact" },
+                            "Questions at any stage: ",
+                            h("a", { href: `mailto:${contact}` }, contact)
+                        )
+                    ),
+
+                    showFooter &&
+                        h(
+                            "footer",
+                            { className: "cw-footer" },
+                            h("span", null, "PLEXUS · ©2026"),
+                            h("span", null, `${SITE_LABEL}/WELCOME`, CLIENT_PAGE && `/${CLIENT_PAGE.toUpperCase()}`)
+                        )
+                )
+            )
+        )
+    }
+
+    /* -------------------------------------------------------
+       SMALL PIECES
+    ------------------------------------------------------- */
+
+    function Eyebrow({ num, label }) {
+        return h(
+            "div",
+            { className: "cw-eyebrow" },
+            h("span", { className: "cw-eyebrow-num" }, num),
+            h("span", null, label)
+        )
+    }
+
+    function Signature() {
+        return h("span", { className: "cw-sig" }, "— THE DIRECTOR")
+    }
+
+    function StageCard({ num, title, body, state }) {
+        return h(
+            "div",
+            { className: "cw-stage", "data-state": state },
+            h("div", { className: "cw-rail" }),
+            h(
+                "div",
+                { className: "cw-stage-row" },
+                h("span", null, num),
+                state === "current" && h("span", { className: "cw-stage-here" }, "YOU ARE HERE"),
+                state === "done" && h("span", null, "APPROVED")
+            ),
+            h("span", { className: "cw-stage-title" }, title),
+            h("p", { className: "cw-stage-body" }, body)
+        )
+    }
+
+    /* -------------------------------------------------------
+       BRIEF — the nine things we need, one open at a time
+    ------------------------------------------------------- */
+
+    /* The answers and open item as one string, to tell a change from a
+       rerender and the page's copy from the server's. */
+    const serialize = (values, open) =>
+        JSON.stringify({
+            open,
+            answers: Object.fromEntries(
+                TYPED_IDS.filter((id) => values[id]).map((id) => [id, values[id]])
+            ),
+        })
+
+    function without(record, key) {
+        if (!(key in record)) return record
+        const { [key]: _gone, ...rest } = record
+        return rest
+    }
+
+    /* Where the brief is (link.kind). local: no Endpoint, or a guest — the
+       draft stays on this device and SEND IT is the Send brief link.
+       loading: asking the server for the client's draft. ready: the
+       server's draft, being edited. unreachable: the server didn't answer;
+       the page shows what it has, read-only, and keeps asking unless the
+       answer was a refusal. sent: the last brief is in; the page says when
+       and offers a new one.
+
+       sync, whether the server has the answers as typed: saved, saving,
+       failed. progress, this page's uploads by file id: { percent,
+       failed? }. A file row reads uploading, added, failed (with RETRY
+       while this page holds the file) or unfinished: a file the server
+       lists as still uploading that this page isn't uploading — cut off
+       with a closed tab, or going on another device. */
+    function BriefSection({ client, slug, storeKey, savesProgress, send, endpoint, anonKey }) {
+        /* With an Endpoint the brief is the server's; without one, or for a
+           guest, it stays on this device. */
+        const remote = Boolean(endpoint) && (storeKey === null || slug !== "")
+
+        /* The first item starts open, as on the boards. Typed answers are
+           kept here rather than in the fields, so closing an item and
+           reopening it shows what was entered. files is the server's list
+           (or, with no server, this device's). */
+        const [openId, setOpenId] = React.useState(NEEDS[0].id)
+        /* The item NEXT has just opened. Its field takes the focus once it
+           is drawn, so the answers can be typed one after another. An item
+           opened by its own header doesn't: a phone would throw its keyboard
+           over an item the client only meant to read. */
+        const [focusId, setFocusId] = React.useState(null)
+        const [values, setValues] = React.useState({})
+        const [files, setFiles] = React.useState([])
+        const [link, setLink] = React.useState(remote ? { kind: "loading" } : { kind: "local" })
+        const [sync, setSync] = React.useState("saved")
+        const [notice, setNotice] = React.useState(null)
+        const [progress, setProgress] = React.useState({})
+        const [submit, setSubmit] = React.useState({ status: "idle" })
+
+        /* Mirrors of state for the callbacks that outlive a render: a save
+           that fires after the delay, an upload that ends minutes later. */
+        const valuesRef = React.useRef(values)
+        valuesRef.current = values
+        const openRef = React.useRef(openId)
+        openRef.current = openId
+        const filesRef = React.useRef(files)
+        filesRef.current = files
+        const linkRef = React.useRef(link)
+        linkRef.current = link
+        const progressRef = React.useRef(progress)
+        progressRef.current = progress
+        const propsRef = React.useRef({ client, slug, storeKey, endpoint, anonKey })
+        propsRef.current = { client, slug, storeKey, endpoint, anonKey }
+
+        /* The version of the answers the server gave, sent back with each
+           save, and the answers as the server last had them, so nothing is
+           saved that it already has. */
+        const versionRef = React.useRef(1)
+        const savedRef = React.useRef(serialize({}, NEEDS[0].id))
+        const savingRef = React.useRef(null)
+        const saveTimerRef = React.useRef()
+        const saveRetriesRef = React.useRef(0)
+        const loadTimerRef = React.useRef()
+        const loadRetriesRef = React.useRef(0)
+
+        /* The File behind each of this page's uploads, for a retry — and,
+           with no server, the files themselves; where each is going; and the
+           handle that stops one. Every file chosen is added to the brief at
+           once (addingRef: a drop of twenty shows twenty rows), then the
+           files go to Storage one at a time, in the order chosen, so the
+           percentages mean something (queueRef). */
+        const localFilesRef = React.useRef(new Map())
+        const uploadsRef = React.useRef(new Map())
+        const handlesRef = React.useRef(new Map())
+        const addingRef = React.useRef(Promise.resolve())
+        const queueRef = React.useRef(Promise.resolve())
+        /* True from the click until the send settles. The state says the
+           same, but a second click in the same frame would still read the
+           old one. */
+        const sendingRef = React.useRef(false)
+        /* The section, and whether a send made on this page has just gone
+           through: the list folds into the SENT card then, and the view is
+           brought back up to the section (see the effect after sendBrief). */
+        const sectionRef = React.useRef(null)
+        const sentHereRef = React.useRef(false)
+        const mountedRef = React.useRef(true)
+        React.useEffect(() => {
+            mountedRef.current = true
+            return () => {
+                mountedRef.current = false
+            }
+        }, [])
+
+        /* THE CACHE. restoredKey is the storeKey whose entry has been looked
+           for: until it matches, nothing is written, so a fresh page can't
+           write its empty state over an entry it hasn't read yet. lastCached
+           is the draft as last read or written, so an unchanged draft isn't
+           written again. uncached is the write the timer is waiting to make,
+           for pagehide to make at once. */
+        const restoredKeyRef = React.useRef(null)
+        const lastCachedRef = React.useRef("")
+        const uncachedRef = React.useRef(null)
+        const cacheTimerRef = React.useRef()
+
+        /* Runs once per storeKey, before the cache effect below can write. */
+        React.useEffect(() => {
+            if (!storeKey || restoredKeyRef.current === storeKey) return
+            const stored = readStoredBrief(storeKey)
+            if (stored) {
+                setValues(stored.draft.answers)
+                setOpenId(stored.draft.open)
+                setFiles(stored.draft.files)
+                lastCachedRef.current = JSON.stringify(stored.draft)
+            } else {
+                /* Nothing saved: the empty draft counts as cached, so a visit
+                   that types nothing writes nothing. */
+                lastCachedRef.current = JSON.stringify(EMPTY_DRAFT)
+            }
+            restoredKeyRef.current = storeKey
+        }, [storeKey])
+
+        const draft = {
+            open: openId,
+            answers: Object.fromEntries(
+                TYPED_IDS.filter((id) => values[id]).map((id) => [id, values[id]])
+            ),
+            files,
+        }
+        const serializedDraft = JSON.stringify(draft)
+
+        const cacheNow = () => {
+            clearTimeout(cacheTimerRef.current)
+            const uncached = uncachedRef.current
+            if (!uncached) return
+            uncachedRef.current = null
+            const written = writeStoredBrief(uncached.storeKey, {
+                version: STORE_VERSION,
+                updatedAt: new Date().toISOString(),
+                draft: uncached.draft,
+            })
+            if (written) lastCachedRef.current = uncached.serialized
+        }
+
+        /* Each change queues one write, CACHE_DELAY_MS after the last of
+           them. Not while the draft is what was last cached (so a restore
+           writes nothing back), not before the restore has run, not while
+           the server is still being asked (the state is the cache itself),
+           and not once the brief is sent: the entry is gone then. */
+        React.useEffect(() => {
+            if (
+                !storeKey ||
+                restoredKeyRef.current !== storeKey ||
+                link.kind === "loading" ||
+                link.kind === "sent" ||
+                serializedDraft === lastCachedRef.current
+            ) {
+                return
+            }
+            uncachedRef.current = { storeKey, serialized: serializedDraft, draft }
+            clearTimeout(cacheTimerRef.current)
+            cacheTimerRef.current = setTimeout(cacheNow, CACHE_DELAY_MS)
+            return () => clearTimeout(cacheTimerRef.current)
+        }, [storeKey, serializedDraft, link.kind])
+
+        /* THE SERVER'S BRIEF becomes the page's. Uploads this page was making
+           that the server no longer lists — removed from another device —
+           are stopped. */
+        const adopt = (brief) => {
+            versionRef.current = brief.version
+            savedRef.current = serialize(brief.answers, brief.open)
+            clearTimeout(saveTimerRef.current)
+            saveRetriesRef.current = 0
+            setValues(brief.answers)
+            setOpenId(brief.open)
+            filesRef.current = brief.files
+            setFiles(brief.files)
+            setSync("saved")
+            for (const [fileId, handle] of handlesRef.current) {
+                if (!brief.files.some((file) => file.id === fileId)) handle.abort()
+            }
+            setProgress((current) =>
+                Object.fromEntries(
+                    Object.entries(current).filter(([fileId]) =>
+                        brief.files.some((file) => file.id === fileId)
+                    )
+                )
+            )
+            if (brief.status === "submitted") {
+                const { storeKey: key } = propsRef.current
+                if (key) clearStoredBrief(key)
+                setLink({ kind: "sent", sentAt: brief.submittedAt })
+            } else {
+                setLink({ kind: "ready", id: brief.id })
+            }
+        }
+
+        /* Asks the server for the client's draft. quiet is a refresh of a
+           page already loaded (the tab came back): a failure then changes
+           nothing. Otherwise a failure shows, and the ask is repeated,
+           unless the server refused outright — a bad address — which
+           repeating wouldn't mend. */
+        const loadBrief = async (quiet) => {
+            const { client: name, slug: who, storeKey: key, endpoint: url, anonKey: token } =
+                propsRef.current
+            try {
+                const answer = await callBrief(url, token, { action: "load", slug: who, client: name })
+                if (!mountedRef.current) return
+                const brief = parseBrief(answer.brief)
+                if (brief) {
+                    adopt(brief)
+                } else if (answer.brief === null) {
+                    if (key) clearStoredBrief(key)
+                    setLink({
+                        kind: "sent",
+                        sentAt: typeof answer.lastSent === "string" ? answer.lastSent : null,
+                    })
+                } else {
+                    throw new Error("Unexpected answer to load")
+                }
+                loadRetriesRef.current = 0
+            } catch (err) {
+                if (!mountedRef.current || quiet) return
+                if (!(err instanceof SendError)) console.error("Loading the brief failed:", err)
+                const refused =
+                    err instanceof BriefError &&
+                    err.status >= 400 &&
+                    err.status < 500 &&
+                    err.status !== 429
+                setLink({
+                    kind: "unreachable",
+                    message: refused ? err.message : UNREACHABLE,
+                })
+                if (refused) return
+                const delay = RETRY_MS[Math.min(loadRetriesRef.current++, RETRY_MS.length - 1)]
+                loadTimerRef.current = setTimeout(() => loadBrief(false), delay)
+            }
+        }
+
+        /* The address read: a guest's page is device-only; a client's waits
+           for the server. */
+        React.useEffect(() => {
+            if (!remote) {
+                setLink({ kind: "local" })
+                return
+            }
+            if (linkRef.current.kind === "local") setLink({ kind: "loading" })
+            if (!storeKey) return
+            loadBrief(false)
+            return () => clearTimeout(loadTimerRef.current)
+        }, [remote, storeKey])
+
+        /* SAVING. One save at a time, with the version the page has. A save
+           over a newer version comes back refused with the newer brief,
+           which takes the page's place. keepalive is for the tab's last
+           save, as it closes. Answers "saved", "conflict" or "failed". */
+        const runSave = (keepalive = false) => {
+            if (savingRef.current) return savingRef.current
+            const current = linkRef.current
+            if (current.kind !== "ready") return Promise.resolve("failed")
+            const open = openRef.current
+            const answers = Object.fromEntries(TYPED_IDS.map((id) => [id, valuesRef.current[id] ?? ""]))
+            const payload = serialize(valuesRef.current, open)
+            if (payload === savedRef.current) return Promise.resolve("saved")
+            const version = versionRef.current
+            const { slug: who, endpoint: url, anonKey: token } = propsRef.current
+            const run = (async () => {
+                try {
+                    const answer = await callBrief(
+                        url,
+                        token,
+                        { action: "save", slug: who, id: current.id, version, open, answers },
+                        keepalive
+                    )
+                    if (!mountedRef.current) return "saved"
+                    versionRef.current =
+                        typeof answer.version === "number" ? answer.version : version + 1
+                    savedRef.current = payload
+                    saveRetriesRef.current = 0
+                    /* Typed on while this went: the next save is due. */
+                    if (serialize(valuesRef.current, openRef.current) !== payload) scheduleSave(0)
+                    else setSync("saved")
+                    return "saved"
+                } catch (err) {
+                    if (!mountedRef.current) return "failed"
+                    if (err instanceof BriefError && (err.status === 409 || err.status === 404)) {
+                        const brief = parseBrief(err.answer.brief)
+                        if (brief) {
+                            adopt(brief)
+                            if (brief.status === "draft") setNotice(CHANGED_ELSEWHERE)
+                        } else {
+                            loadBrief(false)
+                        }
+                        return "conflict"
+                    }
+                    if (!(err instanceof SendError)) console.error("Saving the brief failed:", err)
+                    setSync("failed")
+                    /* A refusal (a bad item, too long) would repeat the same
+                       way; anything else — no connection, the server's own
+                       trouble — is tried again. */
+                    const refused =
+                        err instanceof BriefError &&
+                        err.status >= 400 &&
+                        err.status < 500 &&
+                        err.status !== 429
+                    if (!refused) {
+                        const delay =
+                            RETRY_MS[Math.min(saveRetriesRef.current++, RETRY_MS.length - 1)]
+                        scheduleSave(delay)
+                    }
+                    return "failed"
+                } finally {
+                    savingRef.current = null
+                }
+            })()
+            savingRef.current = run
+            return run
+        }
+
+        const scheduleSave = (delay) => {
+            clearTimeout(saveTimerRef.current)
+            saveTimerRef.current = setTimeout(() => {
+                runSave()
+            }, delay)
+        }
+
+        /* Each change queues one save, SAVE_DELAY_MS after the last of them,
+           while the page has the server's draft and the answers differ from
+           what the server has. */
+        const serializedAnswers = serialize(values, openId)
+        React.useEffect(() => {
+            if (link.kind !== "ready" || serializedAnswers === savedRef.current) return
+            setSync("saving")
+            scheduleSave(SAVE_DELAY_MS)
+            return () => clearTimeout(saveTimerRef.current)
+        }, [link.kind, serializedAnswers])
+
+        /* The latest of the callbacks below, for the one-time listeners. */
+        const latestRef = React.useRef({ cacheNow, runSave, loadBrief })
+        latestRef.current = { cacheNow, runSave, loadBrief }
+
+        /* A tab closed or backgrounded gets its cache write and its save at
+           once. pagehide is the last event a tab can rely on, on phones too;
+           visibilitychange covers a phone that puts the browser away and
+           later discards it. A tab that comes back asks the server for the
+           brief again, so what was typed on another device meanwhile shows —
+           unless it has a change of its own still to save, which goes
+           first. */
+        React.useEffect(() => {
+            const flush = () => {
+                latestRef.current.cacheNow()
+                if (linkRef.current.kind === "ready") {
+                    clearTimeout(saveTimerRef.current)
+                    latestRef.current.runSave(true)
+                }
+            }
+            const onVisibility = () => {
+                if (document.visibilityState === "hidden") {
+                    flush()
+                } else if (
+                    linkRef.current.kind === "ready" &&
+                    !savingRef.current &&
+                    serialize(valuesRef.current, openRef.current) === savedRef.current
+                ) {
+                    latestRef.current.loadBrief(true)
+                }
+            }
+            window.addEventListener("pagehide", flush)
+            document.addEventListener("visibilitychange", onVisibility)
+            return () => {
+                window.removeEventListener("pagehide", flush)
+                document.removeEventListener("visibilitychange", onVisibility)
+                latestRef.current.cacheNow()
+            }
+        }, [])
+
+        /* FILES. How each row reads, from the server's list and this page's
+           uploads. With no server, a file is in only while this page holds
+           it. */
+        const fileState = (file) => {
+            const going = progress[file.id]
+            if (going?.failed) {
+                return { kind: "failed", retry: localFilesRef.current.has(file.id) }
+            }
+            if (going) return { kind: "uploading", percent: going.percent }
+            if (file.status === "uploaded" && (remote || localFilesRef.current.has(file.id))) {
+                return { kind: "added" }
+            }
+            return { kind: "unfinished" }
+        }
+
+        /* An email item counts once what's typed looks like an address, so
+           half of one never reads ADDED. */
+        const counts = (need) => {
+            if (need.kind === "upload") {
+                return files.some((file) => {
+                    if (file.item !== need.id) return false
+                    const state = fileState(file).kind
+                    return state === "added" || state === "uploading"
+                })
+            }
+            const value = (values[need.id] ?? "").trim()
+            return need.kind === "email" ? looksLikeEmail(value) : value !== ""
+        }
+
+        const chain = (ref, job) => {
+            ref.current = ref.current.then(job).catch(() => undefined)
+        }
+        const enqueue = (job) => chain(queueRef, job)
+
+        /* One file, from the moment it is chosen: the server adds it and
+           signs its token, so it shows on the list and counts as going at
+           once; then, in its turn, the file goes to Storage and confirm
+           marks it in. The same name chosen again while its first upload is
+           going takes its place: the server replaces the entry, and the
+           first upload stops here. */
+        const uploadOne = async (item, file) => {
+            const current = linkRef.current
+            if (current.kind !== "ready" || !mountedRef.current) return
+            for (const listed of filesRef.current) {
+                if (listed.item === item && listed.name === file.name) {
+                    handlesRef.current.get(listed.id)?.abort()
+                }
+            }
+            const { slug: who, endpoint: url, anonKey: token } = propsRef.current
+            let started
+            try {
+                started = parseUpload(
+                    await callBrief(url, token, {
+                        action: "upload",
+                        slug: who,
+                        id: current.id,
+                        item,
+                        name: file.name,
+                        size: file.size,
+                    })
+                )
+            } catch (err) {
+                if (!mountedRef.current) return
+                if (err instanceof BriefError && err.status === 409) {
+                    const brief = parseBrief(err.answer.brief)
+                    if (brief) adopt(brief)
+                    return
+                }
+                if (!(err instanceof SendError)) console.error("Adding a file failed:", err)
+                setNotice(err instanceof SendError ? err.message : SEND_FAILED)
+                return
+            }
+            if (!mountedRef.current) return
+            localFilesRef.current.set(started.file.id, file)
+            uploadsRef.current.set(started.file.id, started.upload)
+            /* The ref as well as the state: the transfer may start before
+               the render that would mirror it. */
+            filesRef.current = started.files
+            setFiles(started.files)
+            setProgress((p) => ({ ...p, [started.file.id]: { percent: 0 } }))
+            enqueue(() => transfer(started.file, file, started.upload))
+        }
+
+        /* The file to Storage, then confirm. A failure leaves the row marked
+           so, with RETRY while this page still has the file. */
+        const transfer = async (entry, file, upload) => {
+            if (!mountedRef.current) return
+            const current = linkRef.current
+            /* Gone from the list while it waited its turn — removed, chosen
+               again, the brief taken over from another device — or the page
+               no longer on the draft: nothing to send. */
+            if (current.kind !== "ready" || !filesRef.current.some((f) => f.id === entry.id)) {
+                setProgress((p) => without(p, entry.id))
+                return
+            }
+            const { slug: who, endpoint: url, anonKey: token } = propsRef.current
+            const handle = newHandle()
+            handlesRef.current.set(entry.id, handle)
+            setProgress((p) => ({ ...p, [entry.id]: { percent: 0 } }))
+            try {
+                await putFile(
+                    upload,
+                    file,
+                    (loaded) => {
+                        if (!mountedRef.current) return
+                        const percent = Math.min(99, Math.floor((loaded / file.size) * 100))
+                        setProgress((p) => (p[entry.id] ? { ...p, [entry.id]: { percent } } : p))
+                    },
+                    async () => {
+                        const signed = await callBrief(url, token, {
+                            action: "sign",
+                            slug: who,
+                            id: current.id,
+                            fileId: entry.id,
+                        })
+                        if (typeof signed.token !== "string") {
+                            throw new Error("Unexpected answer to sign")
+                        }
+                        return signed.token
+                    },
+                    handle
+                )
+                const answer = await callBrief(url, token, {
+                    action: "confirm",
+                    slug: who,
+                    id: current.id,
+                    fileId: entry.id,
+                })
+                if (!mountedRef.current) return
+                setFiles(
+                    parseFiles(answer.files) ??
+                        filesRef.current.map((f) =>
+                            f.id === entry.id ? { ...f, status: "uploaded" } : f
+                        )
+                )
+                setProgress((p) => without(p, entry.id))
+                uploadsRef.current.delete(entry.id)
+            } catch (err) {
+                if (!mountedRef.current) return
+                if (err instanceof CancelledError) {
+                    setProgress((p) => without(p, entry.id))
+                    return
+                }
+                if (err instanceof BriefError && (err.status === 404 || err.status === 409)) {
+                    /* The file was removed, or the brief sent, from another
+                       device while this went. */
+                    setProgress((p) => without(p, entry.id))
+                    const brief = parseBrief(err.answer.brief)
+                    if (brief) adopt(brief)
+                    else setFiles((f) => f.filter((x) => x.id !== entry.id))
+                    return
+                }
+                if (!(err instanceof SendError)) console.error("Uploading a file failed:", err)
+                setProgress((p) => ({
+                    ...p,
+                    [entry.id]: {
+                        percent: p[entry.id]?.percent ?? 0,
+                        failed: err instanceof SendError ? err.message : SEND_FAILED,
+                    },
+                }))
+            } finally {
+                handlesRef.current.delete(entry.id)
+            }
+        }
+
+        const addFiles = (item, chosen) => {
+            setNotice(null)
+            if (!remote) {
+                /* No server: the files are held here, and a name chosen again
+                   takes the earlier one's place, as on the server. */
+                const entries = chosen.map((file) => {
+                    const id = newId()
+                    localFilesRef.current.set(id, file)
+                    return { id, item, name: file.name, size: file.size, status: "uploaded" }
+                })
+                setFiles((current) => [
+                    ...current.filter(
+                        (f) => !(f.item === item && chosen.some((c) => c.name === f.name))
+                    ),
+                    ...entries,
+                ])
+                return
+            }
+            for (const file of chosen) chain(addingRef, () => uploadOne(item, file))
+        }
+
+        /* A failed upload sent again, with a fresh token: the first may well
+           have run out while the file waited. */
+        const retryUpload = (fileId) => {
+            const file = localFilesRef.current.get(fileId)
+            const upload = uploadsRef.current.get(fileId)
+            const entry = filesRef.current.find((f) => f.id === fileId)
+            const current = linkRef.current
+            if (!file || !upload || !entry || current.kind !== "ready") return
+            setProgress((p) => ({ ...p, [fileId]: { percent: 0 } }))
+            enqueue(async () => {
+                const { slug: who, endpoint: url, anonKey: token } = propsRef.current
+                let fresh
+                try {
+                    const signed = await callBrief(url, token, {
+                        action: "sign",
+                        slug: who,
+                        id: current.id,
+                        fileId,
+                    })
+                    if (typeof signed.token !== "string") throw new Error("Unexpected answer to sign")
+                    fresh = signed.token
+                } catch (err) {
+                    if (!mountedRef.current) return
+                    if (!(err instanceof SendError)) console.error("Renewing an upload failed:", err)
+                    setProgress((p) => ({
+                        ...p,
+                        [fileId]: {
+                            percent: 0,
+                            failed: err instanceof SendError ? err.message : SEND_FAILED,
+                        },
+                    }))
+                    return
+                }
+                await transfer(entry, file, { ...upload, token: fresh })
+            })
+        }
+
+        /* Off the page at once, and off the server and out of Storage after.
+           An upload still going is stopped first. */
+        const removeFile = async (fileId) => {
+            handlesRef.current.get(fileId)?.abort()
+            const entry = filesRef.current.find((f) => f.id === fileId)
+            localFilesRef.current.delete(fileId)
+            uploadsRef.current.delete(fileId)
+            setProgress((p) => without(p, fileId))
+            filesRef.current = filesRef.current.filter((f) => f.id !== fileId)
+            setFiles((current) => current.filter((f) => f.id !== fileId))
+            const current = linkRef.current
+            if (!remote || current.kind !== "ready") return
+            const { slug: who, endpoint: url, anonKey: token } = propsRef.current
+            try {
+                const answer = await callBrief(url, token, {
+                    action: "remove",
+                    slug: who,
+                    id: current.id,
+                    fileId,
+                })
+                const list = parseFiles(answer.files)
+                if (list && mountedRef.current) setFiles(list)
+            } catch (err) {
+                if (!mountedRef.current) return
+                if (err instanceof BriefError && err.status === 409) {
+                    const brief = parseBrief(err.answer.brief)
+                    if (brief) adopt(brief)
+                    return
+                }
+                if (!(err instanceof SendError)) console.error("Removing a file failed:", err)
+                setNotice(`Couldn't remove ${entry?.name ?? "the file"}. Try again.`)
+                loadBrief(true)
+            }
+        }
+
+        const inFlight = files.some((file) => {
+            const going = progress[file.id]
+            return Boolean(going) && !going.failed
+        })
+
+        /* Of every byte this page is uploading, the share that has gone. */
+        const uploadPercent = () => {
+            let total = 0
+            let loaded = 0
+            for (const file of files) {
+                const going = progress[file.id]
+                if (!going || going.failed) continue
+                total += file.size
+                loaded += (file.size * going.percent) / 100
+            }
+            return total ? Math.min(99, Math.floor((loaded / total) * 100)) : 0
+        }
+
+        /* Closing the tab would cut an upload or the send short; the browser
+           asks first. */
+        const sending = submit.status === "sending"
+        React.useEffect(() => {
+            if (!sending && !inFlight) return
+            const warn = (e) => {
+                e.preventDefault()
+                e.returnValue = ""
+            }
+            window.addEventListener("beforeunload", warn)
+            return () => window.removeEventListener("beforeunload", warn)
+        }, [sending, inFlight])
+
+        const doneCount = NEEDS.filter(counts).length
+        const complete = doneCount === NEEDS.length
+        const progressPercent =
+            link.kind === "sent" ? 100 : Math.round((doneCount / NEEDS.length) * 100)
+
+        /* SENDING. The answers are saved first, then any upload still going
+           is waited for, then the server is asked to submit: it checks every
+           file is in Storage and tells Slack. A brief already sent — from
+           another device, or a first answer lost — is taken as sent. */
+        const sendBrief = async () => {
+            const current = linkRef.current
+            if (sendingRef.current || current.kind !== "ready") return
+            /* The function would refuse it too; here the item opens on it. */
+            const badEmail = NEEDS.find(
+                (need) =>
+                    need.kind === "email" &&
+                    (values[need.id] ?? "").trim() !== "" &&
+                    !counts(need)
+            )
+            if (badEmail) {
+                setOpenId(badEmail.id)
+                setSubmit({ status: "error", message: BAD_EMAIL })
+                return
+            }
+            if (doneCount === 0) {
+                setSubmit({
+                    status: "error",
+                    message: "Add at least one item before sending.",
+                })
+                return
+            }
+            sendingRef.current = true
+            setSubmit({ status: "sending" })
+            setNotice(null)
+            const { slug: who, storeKey: key, endpoint: url, anonKey: token } = propsRef.current
+            try {
+                clearTimeout(saveTimerRef.current)
+                let saved = await runSave()
+                while (
+                    saved === "saved" &&
+                    serialize(valuesRef.current, openRef.current) !== savedRef.current
+                ) {
+                    saved = await runSave()
+                }
+                if (saved === "conflict") throw new SendError(CHANGED_BEFORE_SEND)
+                if (saved === "failed") throw new SendError(NOT_SAVED)
+
+                await addingRef.current
+                await queueRef.current
+                if (!mountedRef.current) return
+                const unfinished = filesRef.current.filter((file) => {
+                    const going = progressRef.current[file.id]
+                    return going ? Boolean(going.failed) : file.status !== "uploaded"
+                })
+                if (unfinished.length) throw new SendError(UNFINISHED)
+
+                const answer = await callBrief(url, token, {
+                    action: "submit",
+                    slug: who,
+                    id: current.id,
+                })
+                if (!mountedRef.current) return
+                if (key) clearStoredBrief(key)
+                sentHereRef.current = true
+                setSubmit({ status: "idle" })
+                setLink({
+                    kind: "sent",
+                    sentAt:
+                        typeof answer.submittedAt === "string"
+                            ? answer.submittedAt
+                            : new Date().toISOString(),
+                })
+            } catch (err) {
+                if (!mountedRef.current) return
+                if (err instanceof BriefError && err.answer.submitted === true) {
+                    sentHereRef.current = true
+                    const brief = parseBrief(err.answer.brief)
+                    if (brief) adopt(brief)
+                    else setLink({ kind: "sent", sentAt: null })
+                    if (key) clearStoredBrief(key)
+                    setSubmit({ status: "idle" })
+                    return
+                }
+                if (err instanceof BriefError && Array.isArray(err.answer.unfinished)) {
+                    const ids = err.answer.unfinished.filter((x) => typeof x === "string")
+                    setProgress((p) => ({
+                        ...p,
+                        ...Object.fromEntries(
+                            ids.map((fileId) => [fileId, { percent: 0, failed: "Didn't finish." }])
+                        ),
+                    }))
+                }
+                if (!(err instanceof SendError)) console.error("Sending the brief failed:", err)
+                setSubmit({
+                    status: "error",
+                    message: err instanceof SendError ? err.message : SEND_FAILED,
+                })
+            } finally {
+                sendingRef.current = false
+            }
+        }
+
+        /* Once sent, the nine items fold into the SENT card and the page
+           loses most of the list's height, so a visitor who pressed SEND IT
+           at its foot is left looking at FROM HERE. The view goes back up to
+           the section's top — only from below it: a visitor who scrolled
+           above it while the files went isn't moved. After the render that
+           folds the list, so the section is where it will stay. */
+        React.useEffect(() => {
+            if (!sentHereRef.current) return
+            sentHereRef.current = false
+            const section = sectionRef.current
+            if (link.kind !== "sent" || !section) return
+            if (section.getBoundingClientRect().top >= 0) return
+            const still = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches
+            section.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "start" })
+        }, [link.kind])
+
+        /* START A NEW BRIEF, after a sent one. */
+        const startNew = async () => {
+            const current = linkRef.current
+            if (current.kind !== "sent") return
+            setLink({ kind: "loading" })
+            setSubmit({ status: "idle" })
+            setNotice(null)
+            const { client: name, slug: who, endpoint: url, anonKey: token } = propsRef.current
+            try {
+                const answer = await callBrief(url, token, { action: "create", slug: who, client: name })
+                const brief = parseBrief(answer.brief)
+                if (!brief) throw new Error("Unexpected answer to create")
+                if (mountedRef.current) adopt(brief)
+            } catch (err) {
+                if (!mountedRef.current) return
+                if (!(err instanceof SendError)) console.error("Starting a brief failed:", err)
+                setLink(current)
+                setNotice(err instanceof SendError ? err.message : SEND_FAILED)
+            }
+        }
+
+        /* The fields hold still while the server is being asked, or the
+           brief is on its way: an edit then would go nowhere. */
+        const locked = link.kind === "loading" || link.kind === "unreachable" || sending
+
+        const ctaLabel = !sending
+            ? "SEND IT TO THE DIRECTOR"
+            : inFlight
+              ? `UPLOADING · ${uploadPercent()}%`
+              : "SENDING…"
+
+        /* The line under the bar: where the brief stands with the server. */
+        const status =
+            link.kind === "loading"
+                ? { text: "Loading your brief…", tone: "quiet" }
+                : link.kind === "unreachable"
+                  ? { text: link.message, tone: "loud" }
+                  : link.kind === "local"
+                    ? {
+                          text: savesProgress
+                              ? "Come back anytime — we save what you've added."
+                              : "Send what you have; you can send more later.",
+                          tone: "quiet",
+                      }
+                    : sync === "saving"
+                      ? { text: "Saving…", tone: "quiet" }
+                      : sync === "failed"
+                        ? { text: SAVE_FAILED, tone: "loud" }
+                        : {
+                              text: savesProgress
+                                  ? "Saved. Come back anytime, on any device."
+                                  : "Send what you have; you can send more later.",
+                              tone: "quiet",
+                          }
+
+        const arrow = h("span", { className: "cw-cta-arrow", "aria-hidden": "true" }, "→")
+
+        return h(
+            "section",
+            { className: "cw-brief", ref: sectionRef },
+            h(
+                "div",
+                { className: "cw-head cw-brief-intro" },
+                h(Eyebrow, { num: "03", label: "YOUR BRIEF" }),
+                h("h2", { className: "cw-h2" }, "Your brand is the source of truth."),
+                h(
+                    "p",
+                    { className: "cw-head-note" },
+                    "What we feature comes from you and appears exactly as you send it. Open each item to add it. ",
+                    h("br", { className: "cw-br" }),
+                    "Short answers are fine."
+                ),
+                h(
+                    "div",
+                    { className: "cw-progress" },
+                    h(
+                        "span",
+                        { className: "cw-progress-label", "aria-live": "polite" },
+                        link.kind === "sent" || complete
+                            ? "That's everything. The director's reading it."
+                            : `${doneCount} OF ${NEEDS.length} ADDED`
+                    ),
+                    h(
+                        "div",
+                        { className: "cw-bar", "aria-hidden": "true" },
+                        h("div", { className: "cw-bar-fill", style: { width: `${progressPercent}%` } })
+                    ),
+                    link.kind !== "sent" &&
+                        h("span", { className: "cw-saved", "data-tone": status.tone, role: "status" }, status.text),
+                    notice && h("span", { className: "cw-notice", role: "status" }, notice)
+                )
+            ),
+
+            h(
+                "div",
+                { className: "cw-brief-list" },
+                link.kind === "sent"
+                    ? h(
+                          "div",
+                          { className: "cw-send cw-send-done" },
+                          h("div", { className: "cw-sent", role: "status" }, "SENT TO THE DIRECTOR"),
+                          h(
+                              "p",
+                              { className: "cw-send-after" },
+                              sentOn(link.sentAt)
+                                  ? `Sent on ${sentOn(link.sentAt)}. We'll be in touch soon.`
+                                  : "We'll be in touch soon.",
+                              " Next up: the director prepares your script, look, and shot plan. You approve everything before we build."
+                          ),
+                          h(
+                              "button",
+                              { type: "button", className: "cw-pill cw-new-brief", onClick: startNew },
+                              "START A NEW BRIEF"
+                          )
+                      )
+                    : h(
+                          Fragment,
+                          null,
+                          h(
+                              "div",
+                              { className: "cw-needs" },
+                              NEEDS.map((need, i) =>
+                                  h(NeedRow, {
+                                      key: need.id,
+                                      need,
+                                      num: pad(i),
+                                      open: openId === need.id,
+                                      done: counts(need),
+                                      value: values[need.id] ?? "",
+                                      files: files.filter((file) => file.item === need.id),
+                                      stateOf: fileState,
+                                      isLast: i === NEEDS.length - 1,
+                                      locked,
+                                      onToggle: () => setOpenId(openId === need.id ? null : need.id),
+                                      takesFocus: focusId === need.id,
+                                      onFocused: () => setFocusId(null),
+                                      onNext: () => {
+                                          const next = i < NEEDS.length - 1 ? NEEDS[i + 1].id : null
+                                          setOpenId(next)
+                                          setFocusId(next)
+                                      },
+                                      onValue: (value) => setValues((v) => ({ ...v, [need.id]: value })),
+                                      onFiles: (list) => addFiles(need.id, list),
+                                      onRemove: removeFile,
+                                      onRetry: retryUpload,
+                                  })
+                              )
+                          ),
+
+                          h(
+                              "div",
+                              { className: "cw-send" },
+                              h(
+                                  "p",
+                                  { className: "cw-send-hint" },
+                                  "Don't have every answer? Leave it blank. We will follow up if we need more."
+                              ),
+                              /* No Endpoint, or a guest: the CTA is the Send
+                                 brief link. */
+                              link.kind === "local"
+                                  ? h(
+                                        "a",
+                                        { className: "cw-cta", href: send },
+                                        h("span", null, "SEND IT TO THE DIRECTOR"),
+                                        arrow
+                                    )
+                                  : h(
+                                        "button",
+                                        {
+                                            type: "button",
+                                            className: "cw-cta",
+                                            "aria-busy": sending,
+                                            disabled: link.kind !== "ready",
+                                            onClick: sendBrief,
+                                        },
+                                        h("span", null, ctaLabel),
+                                        !sending && arrow
+                                    ),
+                              submit.status === "error" &&
+                                  h("p", { className: "cw-send-error", role: "alert" }, submit.message),
+                              h(
+                                  "p",
+                                  { className: "cw-send-after" },
+                                  "Next up: the director prepares your script, look, and shot plan. You approve everything before we build."
+                              )
+                          )
+                      )
+            )
+        )
+    }
+
+    function NeedRow({
+        need,
+        num,
+        open,
+        done,
+        value,
+        files,
+        stateOf,
+        isLast,
+        locked,
+        takesFocus,
+        onFocused,
+        onToggle,
+        onNext,
+        onValue,
+        onFiles,
+        onRemove,
+        onRetry,
+    }) {
+        const panelId = `${SCOPE}-${need.id}`
+        const panelRef = React.useRef(null)
+        const inputRef = React.useRef(null)
+        const [over, setOver] = React.useState(false)
+        const [refused, setRefused] = React.useState([])
+
+        /* The cursor goes in after whatever is already typed, so a returning
+           client carries on from the end. An upload item has no field; the
+           request is spent all the same. */
+        React.useEffect(() => {
+            if (!open || !takesFocus) return
+            onFocused()
+            const field = panelRef.current?.querySelector(".cw-field")
+            if (!field) return
+            field.focus()
+            field.setSelectionRange(field.value.length, field.value.length)
+        }, [open, takesFocus])
+
+        /* A choice of only refused files keeps the files already added. */
+        const takeFiles = (list) => {
+            if (locked || !list || list.length === 0) return
+            const formats = need.formats ?? ""
+            const all = Array.from(list)
+            const taken = all.filter((file) => takes(formats, file.name))
+            setRefused(all.filter((file) => !taken.includes(file)).map((file) => file.name))
+            if (taken.length) onFiles(taken)
+        }
+
+        const added = h("span", { className: "cw-added" }, h(CheckIcon), "ADDED")
+
+        const field = (extra) =>
+            h(need.kind === "long" ? "textarea" : "input", {
+                className: "cw-field",
+                "aria-label": need.title,
+                placeholder: need.hint,
+                value,
+                readOnly: locked,
+                onChange: (e) => onValue(e.target.value),
+                ...extra,
+            })
+
+        return h(
+            "div",
+            { className: "cw-need", "data-open": open ? "true" : "false" },
+            h(
+                "button",
+                {
+                    type: "button",
+                    className: "cw-need-toggle",
+                    "aria-expanded": open,
+                    "aria-controls": panelId,
+                    onClick: onToggle,
+                },
+                h("span", { className: "cw-need-num" }, num),
+                h(
+                    "span",
+                    { className: "cw-need-text" },
+                    h("span", { className: "cw-need-title" }, need.title),
+                    h("span", { className: "cw-need-body" }, need.body),
+                    /* The phone board sets ADDED under the text; the desktop
+                       board beside the chevron. Both are here, and the
+                       stylesheet shows one. */
+                    done && h("span", { className: "cw-added-inline" }, added)
+                ),
+                h(
+                    "span",
+                    { className: "cw-need-end" },
+                    done && h("span", { className: "cw-added-side" }, added),
+                    h(ChevronIcon)
+                )
+            ),
+
+            open &&
+                h(
+                    "div",
+                    { className: "cw-need-panel", id: panelId, ref: panelRef },
+                    need.kind === "upload" &&
+                        h(
+                            Fragment,
+                            null,
+                            h(
+                                "div",
+                                {
+                                    className: "cw-drop",
+                                    "data-over": over ? "true" : "false",
+                                    onDragOver: (e) => {
+                                        e.preventDefault()
+                                        setOver(true)
+                                    },
+                                    onDragLeave: () => setOver(false),
+                                    onDrop: (e) => {
+                                        e.preventDefault()
+                                        setOver(false)
+                                        takeFiles(e.dataTransfer.files)
+                                    },
+                                },
+                                h(UploadIcon),
+                                h("span", { className: "cw-drop-text" }, "Drag files here, or"),
+                                h(
+                                    "button",
+                                    {
+                                        type: "button",
+                                        className: "cw-pill",
+                                        "aria-disabled": locked,
+                                        onClick: () => {
+                                            if (!locked) inputRef.current?.click()
+                                        },
+                                    },
+                                    "CHOOSE FILES"
+                                ),
+                                h("span", { className: "cw-formats" }, need.formats),
+                                h("input", {
+                                    ref: inputRef,
+                                    type: "file",
+                                    multiple: true,
+                                    accept: acceptFor(need.formats ?? ""),
+                                    "aria-label": need.title,
+                                    className: "cw-file-input",
+                                    onChange: (e) => {
+                                        takeFiles(e.target.files)
+                                        /* So the same file can be chosen
+                                           again after a failure. */
+                                        e.target.value = ""
+                                    },
+                                })
+                            ),
+                            files.length > 0 &&
+                                h(
+                                    "ul",
+                                    { className: "cw-files", "aria-label": `${need.title}: files` },
+                                    files.map((file) =>
+                                        h(FileRow, {
+                                            key: file.id,
+                                            file,
+                                            state: stateOf(file),
+                                            locked,
+                                            onRemove: () => onRemove(file.id),
+                                            onRetry: () => onRetry(file.id),
+                                        })
+                                    )
+                                ),
+                            refused.length > 0 &&
+                                h(
+                                    "span",
+                                    { className: "cw-refused", role: "alert" },
+                                    refusedSummary(refused, need.formats ?? "")
+                                )
+                        ),
+
+                    need.kind === "short" && field({ type: "text", maxLength: MAX_ANSWER_CHARS }),
+
+                    /* Text with an email keyboard rather than type="email",
+                       whose value the browser trims and may rewrite (a domain
+                       to punycode) under the cursor. The page checks the
+                       address itself when the brief is sent. */
+                    need.kind === "email" &&
+                        field({
+                            type: "text",
+                            inputMode: "email",
+                            autoComplete: "email",
+                            autoCapitalize: "off",
+                            spellCheck: false,
+                            maxLength: MAX_EMAIL_CHARS,
+                        }),
+
+                    need.kind === "long" && field({ rows: 4, maxLength: MAX_ANSWER_CHARS }),
+
+                    h("button", { type: "button", className: "cw-next", onClick: onNext }, isLast ? "DONE" : "NEXT →")
+                )
+        )
+    }
+
+    /* One file on an upload item: its name and size, how it stands, and
+       REMOVE. A failed upload this page still holds offers RETRY; one it
+       doesn't, or one cut off elsewhere, asks for the file again. */
+    function FileRow({ file, state, locked, onRemove, onRetry }) {
+        return h(
+            "li",
+            { className: "cw-file", "data-state": state.kind },
+            h(
+                "span",
+                { className: "cw-file-name" },
+                file.name,
+                h("span", { className: "cw-file-meta" }, ` ${readableSize(file.size)}`)
+            ),
+            h(
+                "span",
+                { className: "cw-file-state" },
+                state.kind === "added" && h(Fragment, null, h(CheckIcon), "ADDED"),
+                state.kind === "uploading" && `UPLOADING · ${state.percent}%`,
+                state.kind === "failed" &&
+                    (state.retry
+                        ? h(
+                              Fragment,
+                              null,
+                              "DIDN'T UPLOAD · ",
+                              h(
+                                  "button",
+                                  { type: "button", className: "cw-file-action", disabled: locked, onClick: onRetry },
+                                  "RETRY"
+                              )
+                          )
+                        : "DIDN'T UPLOAD · ADD IT AGAIN"),
+                state.kind === "unfinished" && "DIDN'T FINISH · ADD IT AGAIN"
+            ),
+            h(
+                "button",
+                {
+                    type: "button",
+                    className: "cw-file-action cw-file-remove",
+                    disabled: locked,
+                    "aria-label": `Remove ${file.name}`,
+                    onClick: onRemove,
+                },
+                "REMOVE"
+            )
+        )
+    }
+
+    /* -------------------------------------------------------
+       REVIEW BLOCK — the note box and approval
+    ------------------------------------------------------- */
+
+    function ReviewBlock({ label, placeholder, cta, after, approverName, hasLink, approved, onApprove }) {
+        return h(
+            "div",
+            { className: "cw-review" },
+            h(
+                "label",
+                { className: "cw-review-label" },
+                h("span", null, label),
+                h("textarea", { rows: 3, className: "cw-field cw-review-field", placeholder })
+            ),
+
+            approved
+                ? h("div", { className: "cw-approved", role: "status" }, `APPROVED · ${approverName.toUpperCase()}`)
+                : h(
+                      "button",
+                      { type: "button", className: "cw-cta cw-approve", disabled: !hasLink, onClick: onApprove },
+                      h("span", null, cta),
+                      h("span", { className: "cw-cta-arrow", "aria-hidden": "true" }, "→")
+                  ),
+
+            !hasLink &&
+                !approved &&
+                h(
+                    "span",
+                    { className: "cw-locked-note" },
+                    `Only ${approverName}, the approver named in your brief, can approve. Open the link we emailed them.`
+                ),
+
+            h("p", { className: "cw-after" }, after)
+        )
+    }
+
+    /* -------------------------------------------------------
+       REVIEW — the cut, round by round
+    ------------------------------------------------------- */
+
+    function ReviewSection({ note, cut, approverName, hasLink, approved, onApprove }) {
+        const [playing, setPlaying] = React.useState(false)
+        const video = cut?.video
+        const poster = cut?.poster?.src ? cut.poster : undefined
+        const round = cut?.round ?? DEFAULT_CUT.round
+        const rounds = cut?.rounds ?? DEFAULT_CUT.rounds
+
+        return h(
+            "section",
+            { className: "cw-stage-section" },
+            h(
+                "div",
+                { className: "cw-head" },
+                h(Eyebrow, { num: "03", label: "THE CUT" }),
+                h("h2", { className: "cw-h2" }, "First look."),
+                h("p", { className: "cw-note" }, note, " ", h(Signature))
+            ),
+
+            h(
+                "div",
+                { className: "cw-player" },
+                h(
+                    "div",
+                    { className: "cw-frame" },
+                    playing && video
+                        ? h("video", {
+                              src: video,
+                              poster: poster?.src,
+                              controls: true,
+                              autoPlay: true,
+                              playsInline: true,
+                              controlsList: "nodownload",
+                          })
+                        : h(
+                              Fragment,
+                              null,
+                              poster && h("img", { src: poster.src, srcSet: poster.srcSet, alt: poster.alt ?? "" }),
+                              h(
+                                  "button",
+                                  {
+                                      type: "button",
+                                      className: "cw-play",
+                                      "aria-label": "Play the review cut",
+                                      onClick: () => setPlaying(true),
+                                  },
+                                  h(PlayIcon)
+                              ),
+                              h("span", { className: "cw-frame-tag" }, "REVIEW CUT · STREAM ONLY")
+                          )
+                ),
+                h("span", { className: "cw-round" }, `ROUND ${round} OF ${rounds}`)
+            ),
+
+            h(ReviewBlock, {
+                label: "NOTES, WITH TIMES",
+                placeholder: "At 0:14 — …",
+                cta: "APPROVE THIS CUT",
+                after: "One note list, one voice. I read every note before the next round.",
+                approverName,
+                hasLink,
+                approved,
+                onApprove,
+            })
+        )
+    }
+
+    /* -------------------------------------------------------
+       DELIVER — the finished files
+    ------------------------------------------------------- */
+
+    function DeliverSection({ note, delivery }) {
+        const files = [
+            {
+                name: delivery?.tvName || DEFAULT_DELIVERY.tvName,
+                meta: delivery?.tvMeta || DEFAULT_DELIVERY.tvMeta,
+                href: delivery?.tvFile,
+            },
+            {
+                name: delivery?.captionedName || DEFAULT_DELIVERY.captionedName,
+                meta: delivery?.captionedMeta || DEFAULT_DELIVERY.captionedMeta,
+                href: delivery?.captionedFile,
+            },
+            {
+                name: delivery?.webName || DEFAULT_DELIVERY.webName,
+                meta: delivery?.webMeta || DEFAULT_DELIVERY.webMeta,
+                href: delivery?.webFile,
+            },
+        ]
+
+        return h(
+            "section",
+            { className: "cw-stage-section" },
+            h(
+                "div",
+                { className: "cw-head" },
+                h(Eyebrow, { num: "03", label: "YOUR SPOT" }),
+                h("h2", { className: "cw-h2" }, "It's ready."),
+                h("p", { className: "cw-note" }, note, " ", h(Signature)),
+                h("span", { className: "cw-spec" }, delivery?.spec || DEFAULT_DELIVERY.spec)
+            ),
+
+            h(
+                "div",
+                { className: "cw-deliverables" },
+                files.map((file) =>
+                    h(
+                        "div",
+                        { className: "cw-deliverable", key: file.name },
+                        h(
+                            "span",
+                            { className: "cw-deliverable-text" },
+                            h("span", { className: "cw-deliverable-name" }, file.name),
+                            h("span", { className: "cw-deliverable-meta" }, file.meta)
+                        ),
+                        /* Without a file the pill keeps its place but is not
+                           a link: an href="#" would jump the page. */
+                        h(
+                            "a",
+                            {
+                                className: "cw-pill cw-download",
+                                href: file.href || undefined,
+                                download: file.href ? file.name : undefined,
+                                "aria-disabled": file.href ? undefined : true,
+                            },
+                            "DOWNLOAD"
+                        )
+                    )
+                )
+            ),
+
+            h("p", { className: "cw-closing" }, "This page stays live as the record of your project.")
+        )
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(h(ClientWelcome, CONFIG))
+})()
+</script>
+</body>
+</html>

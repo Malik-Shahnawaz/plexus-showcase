@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Not found — Plexus</title>
+<script>
+/* GitHub Pages answers every address it has no file for with this page.
+   The welcome addresses have no file: /welcome/, the guest's, and a
+   client's /welcome/{name}-{slug}: the name one or more words of letters
+   and digits joined by hyphens (client, client-name, client-name-surname),
+   the slug exactly six letters and digits (CLIENT_PATH in the welcome
+   page). For those, the welcome page is fetched and drawn here in place of
+   this one, never redirected to, so the bar keeps the address the visitor
+   opened and the page reads the slug off it. Anything else,
+   /welcome/client-name-abc among it, is a real 404, below. */
+(function () {
+    var path = window.location.pathname
+    if (!/^\/welcome\/?$/.test(path) && !/^\/welcome\/(?:[A-Za-z0-9]+-)+[A-Za-z0-9]{6}$/.test(path)) return
+
+    var root = document.documentElement
+    /* Hidden until the welcome page takes its place, so a client never sees
+       "nothing at this address" first. */
+    root.classList.add("cw-routing")
+
+    function whenParsed(run) {
+        if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run)
+        else run()
+    }
+
+    /* A parsed document's scripts never run, so each is made again, in
+       order, as the parser would run them: the page's own script needs
+       React loaded first. One that fails to load still lets the next run,
+       and the page's script then shows its own "didn't load" line. */
+    function runScripts(scripts, i) {
+        if (i === scripts.length) return
+        var parsed = scripts[i]
+        var script = document.createElement("script")
+        Array.prototype.forEach.call(parsed.attributes, function (attr) {
+            script.setAttribute(attr.name, attr.value)
+        })
+        if (parsed.hasAttribute("src")) {
+            script.onload = script.onerror = function () {
+                runScripts(scripts, i + 1)
+            }
+            parsed.replaceWith(script)
+        } else {
+            script.textContent = parsed.textContent
+            parsed.replaceWith(script)
+            runScripts(scripts, i + 1)
+        }
+    }
+
+    /* From the site's root: a relative path would look inside welcome/. */
+    fetch("/plexus-client-welcome.html", { credentials: "same-origin" })
+        .then(function (response) {
+            if (!response.ok) throw new Error("Welcome page: HTTP " + response.status)
+            return response.text()
+        })
+        .then(function (html) {
+            var page = new DOMParser().parseFromString(html, "text/html")
+            /* A parsed document has scripting off, so its noscript is live
+               markup; scripting is on here. */
+            page.querySelectorAll("noscript").forEach(function (node) {
+                node.remove()
+            })
+            whenParsed(function () {
+                document.replaceChild(document.adoptNode(page.documentElement), root)
+                runScripts(Array.prototype.slice.call(document.querySelectorAll("script")), 0)
+            })
+        })
+        .catch(function (error) {
+            console.error(error)
+            whenParsed(function () {
+                document.querySelector(".eyebrow").textContent = "DIDN'T LOAD"
+                document.querySelector("h1").textContent = "This page didn't load. Reload it to try again."
+                root.classList.remove("cw-routing")
+            })
+        })
+})()
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&amp;family=Plus+Jakarta+Sans:wght@500&amp;display=swap" rel="stylesheet">
+<style>
+html,
+body {
+    margin: 0;
+    background: #03192c;
+}
+
+/* A welcome address, while the welcome page loads (see the script). */
+.cw-routing body {
+    visibility: hidden;
+}
+
+body {
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    padding: 48px clamp(24px, 6vw, 80px);
+    background-color: #06306b;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(168deg, #03192c 0%, #063a7a 45%, #0a5cb0 100%);
+    background-size: 76px 76px, 76px 76px, 100% 100%;
+    color: #e9edf5;
+    font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+}
+
+.eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 15px;
+    letter-spacing: 0.14em;
+    color: #a9bedc;
+}
+
+.eyebrow span {
+    margin-right: 16px;
+    color: #2ee6c4;
+}
+
+h1 {
+    margin: 0;
+    font-size: clamp(44px, 8vw, 96px);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+}
+
+a {
+    align-self: flex-start;
+    color: #e9edf5;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #6fa8ff;
+}
+
+a:focus-visible {
+    outline: 2px solid #2ee6c4;
+    outline-offset: 4px;
+}
+</style>
+</head>
+<body>
+<div class="eyebrow"><span>404</span>NOT FOUND</div>
+<h1>There's nothing at this address.</h1>
+<a href="/">CREATIVE SHOWCASE →</a>
+</body>
+</html>
