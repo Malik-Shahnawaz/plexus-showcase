@@ -101,7 +101,7 @@ a:hover{color:#6fa8ff;}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;layout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Featured&quot;,&quot;Uniform&quot;],&quot;default&quot;:&quot;Uniform&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;columns&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[2,3],&quot;default&quot;:3,&quot;tsType&quot;:&quot;number&quot;},&quot;linkToWork&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
-/* Title, meta, card image, slug, hover GIF, film. Image and GIF are paths under ./assets/. The GIF is
+/* Title, meta, card image, slug, hover GIF (or null), film. Image and GIF are paths under ./assets/. The GIF is
    fetched on the card's first hover: they are 8-12 MB each, so ten up front would be close to 100 MB.
    The films are the Mux links in ../ctvbuyer/mux_videos.json. */
 const WORK = [
@@ -113,6 +113,7 @@ const WORK = [
   ['Honey Beer','Brand Launch Demo','HoneyBeer/HoneybeerFrame1.png','honey-beer','HoneyBeer/HoneyBeer Gif.gif','https://player.mux.com/30226mRiCaunMpEmaRqKm6LoL1hWBa9KdgzrnxEX2O02k'],
   ['Event Planning','Experiential Brand Film','Event/Event Frame4.png','event-planning','Event/Event Gif.gif','https://player.mux.com/JAU007r9AQbitiSAhnWDUn4IL00m4cQEtylCETjruPK6s'],
   ['VegasBuilder','App Acquisition & Positioning','Vegas Builder/VegasBuilders Frame1.png','vegasbuilder','Vegas Builder/VegasBuilders Gif.gif','https://player.mux.com/p02sa9ZsSPXNnmamCythJMmF6p1FW9YKm3yW01BUeDsjs'],
+  ['VegasBuilder','Scenic Landmark & App Acquisition','NewVegasBuilder/preview_new_vegas_builder.png','vegasbuilder-scenic-landmark',null,'https://player.mux.com/h1A6n0255r801Q02s9Q02yZkmGlra322PGXf6nCO00gJgzZo'],
   ['BidSlam','Direct-Response E-Commerce','Bidslam/Bidslam Frame1.png','bidslam','Bidslam/Bidslam Gif.gif','https://player.mux.com/y8s38WeP8hrLsRgPECjH55gWL1IBaVoqoys0200onqHoY'],
   ['Prophet X','Category Reframe & User Conversion','Phophet X/ProphetX Frame1.png','prophet-x','Phophet X/ProphetX Gif.gif','https://player.mux.com/bh9uJIEDeyF2sd02D676SpJ00tYIxzjOpFclYEg01Trw9g'],
 ];
@@ -279,10 +280,10 @@ class Component extends DCLogic {
   }
   /* Plays from the first frame on every hover: a GIF has no currentTime, so setting its src again
      (the same file, already loaded, nothing fetched) is what restarts it. It is shown only once it
-     has loaded, and only while hovered. */
+     has loaded, and only while hovered. A card without a GIF keeps its still. */
   playGif(card, url) {
     const gif = card.querySelector('.cv-gif');
-    if (!gif) return;
+    if (!gif || !url) return;
     gif.dataset.hover = 'true';
     if (!gif.dataset.bound) {
       gif.dataset.bound = '1';
@@ -304,7 +305,7 @@ class Component extends DCLogic {
     const last = WORK.length - 1;
     const items = WORK.map(([title, meta, img, slug, gif, video], i) => {
       const full = layout === 'Featured' && (i === 0 || (cols === 2 && i === last && last % 2 === 1));
-      const gifUrl = asset(gif);
+      const gifUrl = gif ? asset(gif) : null;
       return {
         num: String(i + 1).padStart(2, '0'),
         title, meta,
